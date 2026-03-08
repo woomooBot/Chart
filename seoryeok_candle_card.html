@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>세력 캔들 패턴 카드</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #0d1117;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    font-family: 'Noto Sans KR', sans-serif;
+    padding: 40px;
+  }
+  .card {
+    background: linear-gradient(145deg, #161b22, #1c2333);
+    border: 1px solid #30363d;
+    border-radius: 20px;
+    width: 560px;
+    padding: 32px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.05);
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #ef4444, #f97316, #ef4444);
+  }
+  .badge-group { display: flex; gap: 8px; align-items: center; margin-bottom: 8px; }
+  .badge {
+    font-size: 11px; font-weight: 700; letter-spacing: -0.02em;
+    padding: 4px 10px; border-radius: 6px;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+  .badge-bull { background: rgba(34,197,94,0.15); color: #22c55e; border: 1px solid rgba(34,197,94,0.3); }
+  .badge-bear { background: rgba(239,68,68,0.15); color: #ef4444; border: 1px solid rgba(239,68,68,0.3); }
+  .badge-candle { background: rgba(249,115,22,0.12); color: #f97316; border: 1px solid rgba(249,115,22,0.25); }
+  .pattern-title { font-size: 22px; font-weight: 900; color: #f0f6fc; letter-spacing: -0.02em; margin-bottom: 4px; }
+  .pattern-subtitle { font-size: 12px; color: #7d8590; margin-bottom: 24px; }
+
+  .section-title {
+    font-size: 11px; color: #484f58; font-weight: 700;
+    letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 12px;
+  }
+
+  /* 장대캔들 기본 설명 */
+  .candle-basic {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 24px;
+  }
+  .candle-item {
+    border-radius: 10px; padding: 14px;
+    display: flex; align-items: center; gap: 12px;
+    border: 1px solid;
+  }
+  .candle-item.bull { background: rgba(239,68,68,0.07); border-color: rgba(239,68,68,0.2); }
+  .candle-item.bear { background: rgba(59,130,246,0.07); border-color: rgba(59,130,246,0.2); }
+  .candle-bar-wrap { display: flex; flex-direction: column; align-items: center; gap: 2px; flex-shrink: 0; }
+  .candle-bar { width: 14px; border-radius: 2px; }
+  .candle-info-label { font-size: 12px; font-weight: 700; margin-bottom: 2px; }
+  .candle-info-desc { font-size: 10px; color: #7d8590; line-height: 1.4; }
+
+  .divider { height: 1px; background: #21262d; margin-bottom: 20px; }
+
+  /* 세력 신호 4가지 그리드 */
+  .signal-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 24px;
+  }
+  .signal-card {
+    background: #0d1117; border: 1px solid #21262d;
+    border-radius: 12px; padding: 14px;
+    transition: border-color 0.2s;
+  }
+  .signal-card:hover { border-color: #30363d; }
+  .signal-chart { margin-bottom: 10px; display: flex; justify-content: center; }
+  .signal-chart svg { height: 70px; }
+  .signal-name {
+    font-size: 13px; font-weight: 800; color: #e6edf3;
+    letter-spacing: -0.02em; margin-bottom: 4px;
+  }
+  .signal-desc { font-size: 11px; color: #7d8590; line-height: 1.4; }
+  .signal-badge {
+    display: inline-block; margin-top: 6px;
+    font-size: 10px; font-weight: 700; padding: 2px 8px;
+    border-radius: 5px; font-family: 'Noto Sans KR', sans-serif;
+  }
+
+  .key-point {
+    display: flex; align-items: flex-start; gap: 10px;
+    background: rgba(249,115,22,0.07); border: 1px solid rgba(249,115,22,0.2);
+    border-radius: 10px; padding: 14px; margin-bottom: 16px;
+  }
+  .key-point-icon { font-size: 18px; flex-shrink: 0; }
+  .key-point-title { font-size: 13px; font-weight: 700; color: #f97316; margin-bottom: 4px; }
+  .key-point-desc { font-size: 11px; color: #7d8590; line-height: 1.6; }
+
+  .warning {
+    display: flex; align-items: flex-start; gap: 10px;
+    background: rgba(239,68,68,0.07); border: 1px solid rgba(239,68,68,0.2);
+    border-radius: 10px; padding: 12px;
+  }
+  .warning-icon { font-size: 14px; flex-shrink: 0; margin-top: 1px; }
+  .warning-text { font-size: 11px; color: #f87171; line-height: 1.5; }
+</style>
+</head>
+<body>
+<div class="card">
+
+  <div class="badge-group">
+    <span class="badge badge-candle">🕯 캔들</span>
+    <span class="badge badge-bull">📈 상승</span>
+    <span class="badge badge-bear">📉 하락</span>
+  </div>
+  <div class="pattern-title">장대캔들 = 세력의 신호</div>
+  <div class="pattern-subtitle">세력의 진입을 알리는 장대캔들과 4가지 후속 패턴</div>
+
+  <!-- 장대양봉/음봉 기본 -->
+  <div class="section-title">장대캔들 기본 의미</div>
+  <div class="candle-basic">
+    <div class="candle-item bull">
+      <div class="candle-bar-wrap">
+        <div class="candle-bar" style="height:52px; background:#ef4444;"></div>
+      </div>
+      <div>
+        <div class="candle-info-label" style="color:#ef4444">장대양봉</div>
+        <div class="candle-info-desc">강한 매수세(세력) 유입<br>→ 본격 <strong style="color:#e6edf3">상승</strong>의 신호</div>
+      </div>
+    </div>
+    <div class="candle-item bear">
+      <div class="candle-bar-wrap">
+        <div class="candle-bar" style="height:52px; background:#3b82f6;"></div>
+      </div>
+      <div>
+        <div class="candle-info-label" style="color:#60a5fa">장대음봉</div>
+        <div class="candle-info-desc">강한 매도세(세력) 유입<br>→ 본격 <strong style="color:#e6edf3">하락</strong>의 신호</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- 세력의 신호 4가지 -->
+  <div class="section-title">세력의 신호 4가지 패턴</div>
+  <div class="signal-grid">
+
+    <!-- 1. 장대 -->
+    <div class="signal-card">
+      <div class="signal-chart">
+        <svg viewBox="0 0 80 70" xmlns="http://www.w3.org/2000/svg">
+          <rect x="30" y="5" width="20" height="55" fill="#ef4444" rx="2"/>
+          <line x1="40" y1="60" x2="40" y2="65" stroke="#ef4444" stroke-width="1.5"/>
+          <polygon points="55,40 65,32 75,25" fill="none" stroke="#ef4444" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <polygon points="73,22 75,30 67,28" fill="#ef4444"/>
+        </svg>
+      </div>
+      <div class="signal-name">① 장대 (=세력)</div>
+      <div class="signal-desc">장대양봉 단독 출현. 세력 진입의 첫 신호.</div>
+      <span class="signal-badge" style="background:rgba(239,68,68,0.12);color:#ef4444;border:1px solid rgba(239,68,68,0.25)">진입 신호</span>
+    </div>
+
+    <!-- 2. 적삼병 -->
+    <div class="signal-card">
+      <div class="signal-chart">
+        <svg viewBox="0 0 80 70" xmlns="http://www.w3.org/2000/svg">
+          <!-- 3개 양봉 계단식 -->
+          <rect x="5" y="42" width="16" height="24" fill="#ef4444" rx="2"/>
+          <rect x="27" y="28" width="16" height="28" fill="#ef4444" rx="2"/>
+          <rect x="49" y="12" width="16" height="32" fill="#ef4444" rx="2"/>
+          <!-- 연결선 -->
+          <polyline points="21,46 27,36" stroke="#484f58" stroke-width="1" stroke-dasharray="2,2"/>
+          <polyline points="43,32 49,20" stroke="#484f58" stroke-width="1" stroke-dasharray="2,2"/>
+          <!-- 화살표 -->
+          <polygon points="68,8 62,16 74,14" fill="#ef4444"/>
+        </svg>
+      </div>
+      <div class="signal-name">② 적삼병</div>
+      <div class="signal-desc">양봉 3개 연속 계단식 상승. 세력 지속 매집 신호.</div>
+      <span class="signal-badge" style="background:rgba(34,197,94,0.12);color:#22c55e;border:1px solid rgba(34,197,94,0.25)">강한 상승</span>
+    </div>
+
+    <!-- 3. 3일상승 -->
+    <div class="signal-card">
+      <div class="signal-chart">
+        <svg viewBox="0 0 80 70" xmlns="http://www.w3.org/2000/svg">
+          <!-- 양봉 -->
+          <rect x="5" y="30" width="16" height="30" fill="#ef4444" rx="2"/>
+          <!-- 음봉 (조정) -->
+          <rect x="29" y="38" width="16" height="22" fill="#3b82f6" rx="2"/>
+          <!-- 큰 양봉 -->
+          <rect x="53" y="10" width="16" height="42" fill="#ef4444" rx="2"/>
+          <!-- 연결선 -->
+          <polyline points="21,35 29,45" stroke="#484f58" stroke-width="1" stroke-dasharray="2,2"/>
+          <polyline points="45,42 53,25" stroke="#484f58" stroke-width="1" stroke-dasharray="2,2"/>
+          <!-- 화살표 -->
+          <polygon points="64,6 58,14 70,12" fill="#ef4444"/>
+        </svg>
+      </div>
+      <div class="signal-name">③ 3일상승</div>
+      <div class="signal-desc">양봉→음봉(눌림)→더 큰 양봉. 한 발 물러났다 두 발 전진.</div>
+      <span class="signal-badge" style="background:rgba(249,115,22,0.12);color:#f97316;border:1px solid rgba(249,115,22,0.25)">눌림 후 상승</span>
+    </div>
+
+    <!-- 4. 세번고점돌파 -->
+    <div class="signal-card">
+      <div class="signal-chart">
+        <svg viewBox="0 0 80 70" xmlns="http://www.w3.org/2000/svg">
+          <!-- 저항선 -->
+          <line x1="0" y1="30" x2="80" y2="30" stroke="#f97316" stroke-width="1" stroke-dasharray="3,2" opacity="0.6"/>
+          <!-- 양봉1 -->
+          <rect x="3" y="32" width="12" height="26" fill="#ef4444" rx="2"/>
+          <!-- 음봉1 -->
+          <rect x="19" y="28" width="12" height="18" fill="#3b82f6" rx="2"/>
+          <!-- 양봉2 -->
+          <rect x="35" y="30" width="12" height="24" fill="#ef4444" rx="2"/>
+          <!-- 음봉2 -->
+          <rect x="51" y="26" width="12" height="16" fill="#3b82f6" rx="2"/>
+          <!-- 돌파 장대양봉 -->
+          <rect x="63" y="5" width="14" height="38" fill="#ef4444" rx="2" opacity="0.95"/>
+          <!-- 화살표 -->
+          <polygon points="70,1 64,10 76,9" fill="#ef4444"/>
+          <!-- 돌파 텍스트 -->
+          <text x="58" y="50" fill="#22c55e" font-size="7" font-family="JetBrains Mono" font-weight="700">돌파!</text>
+        </svg>
+      </div>
+      <div class="signal-name">④ 세번고점돌파</div>
+      <div class="signal-desc">저항선을 3번 테스트 후 장대양봉으로 돌파. 강한 상승 탄력.</div>
+      <span class="signal-badge" style="background:rgba(96,165,250,0.12);color:#60a5fa;border:1px solid rgba(96,165,250,0.25)">저항 돌파</span>
+    </div>
+
+  </div>
+
+  <!-- 핵심 포인트 -->
+  <div class="key-point">
+    <div class="key-point-icon">💡</div>
+    <div>
+      <div class="key-point-title">공통 핵심 — 왜 장대캔들이 중요한가?</div>
+      <div class="key-point-desc">
+        개인투자자는 이렇게 큰 캔들을 만들 수 없어요.<br>
+        기관·외국인 등 <strong style="color:#e6edf3">세력이 움직였다는 직접적인 증거</strong>이며,<br>
+        4가지 패턴 모두 "세력이 물량을 모으고 있다"는 신호예요.
+      </div>
+    </div>
+  </div>
+
+  <div class="warning">
+    <div class="warning-icon">⚠️</div>
+    <div class="warning-text">
+      장대캔들 단독보다 패턴과 결합할수록 신뢰도 상승 · 거래량 동반 여부 반드시 확인 · 저항선·이동평균선 위치와 함께 판단
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
