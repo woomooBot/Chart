@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>퀀트투자 설명</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #f0f2f5;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    font-family: 'Noto Sans KR', sans-serif;
+    padding: 40px;
+  }
+  .card {
+    background: #ffffff;
+    border: 1px solid #e2e5e9;
+    border-radius: 20px;
+    width: 560px;
+    padding: 32px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.08), 0 1px 4px rgba(0,0,0,0.04);
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #6366f1, #8b5cf6, #6366f1);
+  }
+
+  .badge-group { display: flex; gap: 8px; align-items: center; margin-bottom: 8px; }
+  .badge {
+    font-size: 11px; font-weight: 700; letter-spacing: -0.02em;
+    padding: 4px 10px; border-radius: 6px;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+  .badge-quant { background: rgba(99,102,241,0.1); color: #6366f1; border: 1px solid rgba(99,102,241,0.25); }
+  .badge-strategy { background: rgba(139,92,246,0.1); color: #8b5cf6; border: 1px solid rgba(139,92,246,0.2); }
+
+  .pattern-title { font-size: 22px; font-weight: 900; color: #1a1d23; letter-spacing: -0.02em; margin-bottom: 4px; }
+  .pattern-subtitle { font-size: 12px; color: #8a919e; margin-bottom: 24px; line-height: 1.5; }
+
+  .section-title {
+    font-size: 11px; color: #b0b7c0; font-weight: 700;
+    letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 12px;
+  }
+  .divider { height: 1px; background: #edf0f3; margin-bottom: 20px; }
+
+  /* 핵심 정의 박스 */
+  .definition {
+    background: #f7f8fa;
+    border: 1px solid #e8ebef;
+    border-left: 3px solid #6366f1;
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin-bottom: 24px;
+    font-size: 13px;
+    color: #3d4452;
+    line-height: 1.7;
+  }
+  .definition strong { color: #6366f1; }
+
+  /* 비교 테이블 */
+  .compare-table { width: 100%; border-collapse: collapse; margin-bottom: 24px; font-size: 12px; }
+  .compare-table th {
+    background: #f7f8fa; color: #8a919e; font-weight: 700;
+    padding: 8px 12px; text-align: left; border-bottom: 1px solid #edf0f3;
+    font-size: 11px; letter-spacing: 0.05em;
+  }
+  .compare-table td {
+    padding: 9px 12px; border-bottom: 1px solid #f3f5f7;
+    color: #3d4452; vertical-align: middle;
+  }
+  .compare-table tr:last-child td { border-bottom: none; }
+  .compare-table td:first-child { color: #8a919e; font-weight: 600; font-size: 11px; }
+  .tag-quant { color: #6366f1; font-weight: 700; }
+  .tag-normal { color: #f97316; font-weight: 700; }
+
+  /* 프로세스 스텝 */
+  .process { display: flex; flex-direction: column; gap: 8px; margin-bottom: 24px; }
+  .process-step {
+    display: flex; align-items: flex-start; gap: 12px;
+    background: #f7f8fa; border: 1px solid #edf0f3;
+    border-radius: 10px; padding: 12px;
+  }
+  .process-num {
+    width: 24px; height: 24px; border-radius: 50%;
+    background: #6366f1; color: #fff;
+    font-size: 11px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; font-family: 'JetBrains Mono', monospace;
+  }
+  .process-content { flex: 1; }
+  .process-name { font-size: 13px; font-weight: 700; color: #1a1d23; margin-bottom: 2px; }
+  .process-desc { font-size: 11px; color: #8a919e; line-height: 1.5; }
+
+  /* 팩터 그리드 */
+  .factor-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 24px; }
+  .factor-item {
+    background: #f7f8fa; border: 1px solid #edf0f3;
+    border-radius: 10px; padding: 12px;
+  }
+  .factor-icon { font-size: 16px; margin-bottom: 5px; }
+  .factor-name { font-size: 12px; font-weight: 700; color: #1a1d23; margin-bottom: 2px; }
+  .factor-desc { font-size: 11px; color: #8a919e; line-height: 1.4; }
+
+  /* 전략 리스트 */
+  .strategy-list { display: flex; flex-direction: column; gap: 6px; margin-bottom: 24px; }
+  .strategy-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 12px;
+    background: #f7f8fa; border: 1px solid #edf0f3; border-radius: 8px;
+  }
+  .strategy-dot { width: 6px; height: 6px; border-radius: 50%; background: #6366f1; flex-shrink: 0; }
+  .strategy-name { font-size: 12px; font-weight: 700; color: #1a1d23; width: 130px; flex-shrink: 0; }
+  .strategy-desc { font-size: 11px; color: #8a919e; line-height: 1.4; }
+
+  /* 장단점 */
+  .pros-cons { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 24px; }
+  .pros, .cons {
+    border-radius: 10px; padding: 14px; border: 1px solid;
+  }
+  .pros { background: rgba(34,197,94,0.04); border-color: rgba(34,197,94,0.2); }
+  .cons { background: rgba(239,68,68,0.04); border-color: rgba(239,68,68,0.15); }
+  .pros-title { font-size: 12px; font-weight: 700; color: #16a34a; margin-bottom: 8px; }
+  .cons-title { font-size: 12px; font-weight: 700; color: #dc2626; margin-bottom: 8px; }
+  .pros-item, .cons-item {
+    font-size: 11px; color: #5a6270; line-height: 1.5;
+    display: flex; gap: 6px; margin-bottom: 4px;
+  }
+  .pros-item::before { content: '✓'; color: #16a34a; font-weight: 700; flex-shrink: 0; }
+  .cons-item::before { content: '✗'; color: #dc2626; font-weight: 700; flex-shrink: 0; }
+
+  /* 시작 방법 */
+  .start-list { display: flex; flex-direction: column; gap: 6px; margin-bottom: 0; }
+  .start-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 12px;
+    background: #f7f8fa; border: 1px solid #edf0f3; border-radius: 8px;
+  }
+  .start-rank {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; font-weight: 700; color: #6366f1;
+    width: 20px; flex-shrink: 0; text-align: center;
+  }
+  .start-name { font-size: 12px; font-weight: 700; color: #1a1d23; width: 130px; flex-shrink: 0; }
+  .start-desc { font-size: 11px; color: #8a919e; }
+
+  .tip {
+    display: flex; align-items: flex-start; gap: 10px;
+    background: rgba(99,102,241,0.06); border: 1px solid rgba(99,102,241,0.18);
+    border-radius: 10px; padding: 12px; margin-top: 20px;
+  }
+  .tip-icon { font-size: 14px; flex-shrink: 0; margin-top: 1px; }
+  .tip-text { font-size: 11px; color: #5a6270; line-height: 1.6; }
+  .tip-text strong { color: #6366f1; }
+</style>
+</head>
+<body>
+<div class="card">
+
+  <div class="badge-group">
+    <span class="badge badge-quant">📊 퀀트</span>
+    <span class="badge badge-strategy">용어 설명</span>
+  </div>
+  <div class="pattern-title">퀀트 투자 (Quant Investing)</div>
+  <div class="pattern-subtitle">수학·통계·알고리즘으로 감정 없이 데이터만으로 투자 결정을 내리는 방식</div>
+
+  <!-- 핵심 정의 -->
+  <div class="definition">
+    사람의 직관이나 감이 아닌, <strong>숫자가 말하는 대로만</strong> 매매해요.<br>
+    과거 데이터에서 수익을 만드는 규칙(팩터)을 찾고, 이를 자동화해서 반복 실행하는 투자 방식이에요.
+  </div>
+
+  <!-- 비교 테이블 -->
+  <div class="section-title">일반 투자 vs 퀀트 투자</div>
+  <table class="compare-table">
+    <tr>
+      <th>구분</th>
+      <th class="tag-normal">일반 투자</th>
+      <th class="tag-quant">퀀트 투자</th>
+    </tr>
+    <tr><td>판단 기준</td><td>직관·뉴스·감</td><td>데이터·수식·통계</td></tr>
+    <tr><td>감정 개입</td><td>많음</td><td>없음</td></tr>
+    <tr><td>종목 수</td><td>소수 집중</td><td>다수 분산</td></tr>
+    <tr><td>매매 주체</td><td>사람</td><td>알고리즘</td></tr>
+    <tr><td>백테스트</td><td>대부분 없음</td><td>필수</td></tr>
+  </table>
+
+  <div class="divider"></div>
+
+  <!-- 프로세스 -->
+  <div class="section-title">핵심 프로세스</div>
+  <div class="process">
+    <div class="process-step">
+      <div class="process-num">1</div>
+      <div class="process-content">
+        <div class="process-name">팩터 발굴</div>
+        <div class="process-desc">수익을 만드는 요인(팩터) 탐색 — 가치·모멘텀·퀄리티·저변동성</div>
+      </div>
+    </div>
+    <div class="process-step">
+      <div class="process-num">2</div>
+      <div class="process-content">
+        <div class="process-name">전략 설계</div>
+        <div class="process-desc">팩터를 조합해 매수·매도 규칙을 수식으로 정의</div>
+      </div>
+    </div>
+    <div class="process-step">
+      <div class="process-num">3</div>
+      <div class="process-content">
+        <div class="process-name">백테스트</div>
+        <div class="process-desc">과거 데이터로 전략을 시뮬레이션해 수익성·리스크 검증</div>
+      </div>
+    </div>
+    <div class="process-step">
+      <div class="process-num">4</div>
+      <div class="process-content">
+        <div class="process-name">실전 적용</div>
+        <div class="process-desc">검증된 전략을 알고리즘이 자동으로 실행</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- 팩터 -->
+  <div class="section-title">대표 팩터 4가지</div>
+  <div class="factor-grid">
+    <div class="factor-item">
+      <div class="factor-icon">💰</div>
+      <div class="factor-name">가치 팩터</div>
+      <div class="factor-desc">PBR·PER 낮은 저평가 종목</div>
+    </div>
+    <div class="factor-item">
+      <div class="factor-icon">🚀</div>
+      <div class="factor-name">모멘텀 팩터</div>
+      <div class="factor-desc">최근 수익률이 높은 종목</div>
+    </div>
+    <div class="factor-item">
+      <div class="factor-icon">🏆</div>
+      <div class="factor-name">퀄리티 팩터</div>
+      <div class="factor-desc">ROE·이익성장률 높은 종목</div>
+    </div>
+    <div class="factor-item">
+      <div class="factor-icon">🛡</div>
+      <div class="factor-name">저변동성 팩터</div>
+      <div class="factor-desc">가격 변동성이 낮은 종목</div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- 장단점 -->
+  <div class="section-title">장점 vs 단점</div>
+  <div class="pros-cons">
+    <div class="pros">
+      <div class="pros-title">👍 장점</div>
+      <div class="pros-item">감정 배제, 규칙 일관성</div>
+      <div class="pros-item">백테스트로 사전 검증</div>
+      <div class="pros-item">다수 종목 동시 관리</div>
+      <div class="pros-item">자동화로 시간 절약</div>
+    </div>
+    <div class="cons">
+      <div class="cons-title">👎 단점</div>
+      <div class="cons-item">과거≠미래 보장 불가</div>
+      <div class="cons-item">과최적화(Overfitting)</div>
+      <div class="cons-item">팩터 효과 소멸 가능</div>
+      <div class="cons-item">블랙스완에 취약</div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- 시작 방법 -->
+  <div class="section-title">개인 투자자 진입 방법 (쉬운 순)</div>
+  <div class="start-list">
+    <div class="start-item">
+      <span class="start-rank">①</span>
+      <span class="start-name">퀀트킹·젠포트</span>
+      <span class="start-desc">코딩 없이 국내 퀀트 전략 플랫폼</span>
+    </div>
+    <div class="start-item">
+      <span class="start-rank">②</span>
+      <span class="start-name">강환국 책</span>
+      <span class="start-desc">"할 수 있다 퀀트투자" 입문서</span>
+    </div>
+    <div class="start-item">
+      <span class="start-rank">③</span>
+      <span class="start-name">파이썬 + FDR</span>
+      <span class="start-desc">FinanceDataReader로 직접 전략 코딩</span>
+    </div>
+    <div class="start-item">
+      <span class="start-rank">④</span>
+      <span class="start-name">팩터 ETF</span>
+      <span class="start-desc">MTUM·VLUE·QUAL 등 미국 ETF 활용</span>
+    </div>
+  </div>
+
+  <div class="tip">
+    <div class="tip-icon">⚠️</div>
+    <div class="tip-text">
+      백테스트 성과가 좋아도 실전에서 다를 수 있어요. <strong>과최적화(Overfitting)</strong>를 항상 경계하고, 충분한 기간의 데이터로 검증하는 게 핵심이에요.
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

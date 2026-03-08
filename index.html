@@ -21,6 +21,7 @@
     --blue: #60a5fa;
     --purple: #c084fc;
     --orange: #f97316;
+    --indigo: #818cf8;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -45,11 +46,10 @@
     z-index: 0;
   }
 
-  /* ── Header ── */
   header {
     position: relative;
     z-index: 1;
-    padding: 60px 40px 36px;
+    padding: 60px 40px 40px;
     max-width: 1100px;
     margin: 0 auto;
     animation: fadeDown 0.6s ease both;
@@ -97,7 +97,7 @@
   .stat-num { font-family: 'JetBrains Mono', monospace; font-size: 22px; font-weight: 700; }
   .stat-label { font-size: 11px; color: var(--dim); text-transform: uppercase; letter-spacing: 0.08em; }
 
-  /* ── Category Tabs (최상위) ── */
+  /* ── Category Tabs ── */
   .category-tabs {
     position: relative;
     z-index: 1;
@@ -107,7 +107,6 @@
     display: flex;
     gap: 4px;
     border-bottom: 1px solid var(--border2);
-    margin-bottom: 0;
     animation: fadeDown 0.6s 0.08s ease both;
   }
 
@@ -123,6 +122,7 @@
     position: relative;
     transition: color 0.2s;
     letter-spacing: -0.01em;
+    white-space: nowrap;
   }
 
   .cat-tab::after {
@@ -131,26 +131,27 @@
     bottom: -1px;
     left: 0; right: 0;
     height: 2px;
-    background: var(--text);
     border-radius: 2px 2px 0 0;
     transform: scaleX(0);
     transition: transform 0.2s ease;
   }
 
   .cat-tab:hover { color: var(--text2); }
+  .cat-tab.active { color: var(--text); }
+  .cat-tab.active::after { transform: scaleX(1); }
 
-  .cat-tab.active {
-    color: var(--text);
-  }
+  /* 탭별 액센트 색상 */
+  .cat-tab[data-cat="chart"]::after  { background: var(--green); }
+  .cat-tab[data-cat="candle"]::after { background: var(--orange); }
+  .cat-tab[data-cat="term"]::after   { background: var(--indigo); }
 
-  .cat-tab.active::after {
-    transform: scaleX(1);
-  }
+  .cat-tab[data-cat="chart"].active  { color: var(--green); }
+  .cat-tab[data-cat="candle"].active { color: var(--orange); }
+  .cat-tab[data-cat="term"].active   { color: var(--indigo); }
 
-  .cat-tab .tab-count {
+  .tab-count {
     font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
-    font-weight: 600;
+    font-size: 10px; font-weight: 600;
     background: var(--surface2);
     border: 1px solid var(--border2);
     color: var(--dim);
@@ -160,7 +161,7 @@
     vertical-align: middle;
   }
 
-  /* ── Filter Bar (하위) ── */
+  /* ── Filter Bar ── */
   .filter-bar {
     position: relative;
     z-index: 1;
@@ -172,6 +173,9 @@
     flex-wrap: wrap;
     animation: fadeDown 0.6s 0.15s ease both;
   }
+
+  /* 용어설명 탭일 때 필터바 숨김 */
+  .filter-bar.hidden { display: none; }
 
   .filter-btn {
     font-family: 'Noto Sans KR', sans-serif;
@@ -204,7 +208,7 @@
     gap: 20px;
   }
 
-  /* ── Card ── */
+  /* ── Dark Card (차트/캔들) ── */
   .card {
     background: var(--surface);
     border: 1px solid var(--border2);
@@ -223,6 +227,18 @@
     border-color: var(--border);
   }
 
+  /* ── Light Card (용어설명) ── */
+  .card.light {
+    background: #ffffff;
+    border-color: #e2e5e9;
+    color: #1a1d23;
+  }
+
+  .card.light:hover {
+    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+    border-color: #c8cdd5;
+  }
+
   .card-accent { height: 3px; width: 100%; }
 
   .card-chart {
@@ -234,54 +250,67 @@
     justify-content: center;
   }
 
+  .card.light .card-chart {
+    background: #f7f8fa;
+    border-bottom-color: #edf0f3;
+  }
+
   .card-chart svg { width: 100%; height: 100px; }
   .card-body { padding: 20px; }
   .card-badges { display: flex; gap: 6px; margin-bottom: 10px; flex-wrap: wrap; }
 
   .badge {
-    font-size: 11px;
-    font-weight: 700;
+    font-size: 11px; font-weight: 700; letter-spacing: -0.02em;
+    padding: 3px 8px; border-radius: 5px;
     font-family: 'Noto Sans KR', sans-serif;
-    padding: 3px 8px;
-    border-radius: 5px;
-    letter-spacing: -0.02em;
   }
 
-  .badge-bull { background: rgba(34,197,94,0.12); color: var(--green); border: 1px solid rgba(34,197,94,0.25); }
-  .badge-bear { background: rgba(239,68,68,0.12); color: var(--red); border: 1px solid rgba(239,68,68,0.25); }
-  .badge-type { background: var(--surface2); color: var(--muted); border: 1px solid var(--border2); }
+  .badge-bull  { background: rgba(34,197,94,0.12);  color: var(--green);  border: 1px solid rgba(34,197,94,0.25); }
+  .badge-bear  { background: rgba(239,68,68,0.12);  color: var(--red);    border: 1px solid rgba(239,68,68,0.25); }
+  .badge-term  { background: rgba(129,140,248,0.12); color: var(--indigo); border: 1px solid rgba(129,140,248,0.25); }
+  .badge-type  { background: var(--surface2); color: var(--muted); border: 1px solid var(--border2); }
+  .badge-type-light { background: #f0f2f5; color: #8a919e; border: 1px solid #e2e5e9; }
 
-  .card-title { font-size: 17px; font-weight: 800; color: var(--text); letter-spacing: -0.02em; margin-bottom: 4px; }
-  .card-subtitle { font-size: 11px; color: var(--muted); margin-bottom: 14px; line-height: 1.4; }
+  .card-title { font-size: 17px; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 4px; }
+  .card.light .card-title { color: #1a1d23; }
+  .card:not(.light) .card-title { color: var(--text); }
+
+  .card-subtitle { font-size: 11px; margin-bottom: 14px; line-height: 1.4; }
+  .card.light .card-subtitle { color: #8a919e; }
+  .card:not(.light) .card-subtitle { color: var(--muted); }
+
   .card-steps { display: flex; flex-direction: column; gap: 5px; margin-bottom: 14px; }
-  .card-step { display: flex; align-items: center; gap: 8px; font-size: 11px; color: var(--muted); }
+  .card-step { display: flex; align-items: center; gap: 8px; font-size: 11px; }
+  .card.light .card-step { color: #5a6270; }
+  .card:not(.light) .card-step { color: var(--muted); }
   .card-step-dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
 
   .card-footer {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding-top: 14px;
-    border-top: 1px solid var(--border2);
+    display: flex; align-items: center; justify-content: space-between;
+    padding-top: 14px; border-top: 1px solid;
   }
+  .card.light .card-footer { border-color: #edf0f3; }
+  .card:not(.light) .card-footer { border-color: var(--border2); }
 
-  .card-link { font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 600; color: var(--dim); text-transform: uppercase; letter-spacing: 0.1em; transition: color 0.2s; }
+  .card-link { font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; transition: color 0.2s; }
+  .card.light .card-link { color: #b0b7c0; }
+  .card:not(.light) .card-link { color: var(--dim); }
   .card:hover .card-link { color: var(--text2); }
+  .card.light:hover .card-link { color: #1a1d23; }
+
   .card-arrow { font-size: 14px; transition: transform 0.2s; }
   .card:hover .card-arrow { transform: translateX(4px); }
 
-  /* ── Empty state ── */
+  /* ── Empty State ── */
   .empty-state {
     grid-column: 1 / -1;
     text-align: center;
     padding: 80px 20px;
     color: var(--dim);
   }
-
   .empty-state-icon { font-size: 36px; margin-bottom: 12px; }
   .empty-state-text { font-size: 14px; line-height: 1.6; }
 
-  /* ── Animations ── */
   @keyframes fadeDown {
     from { opacity: 0; transform: translateY(-16px); }
     to   { opacity: 1; transform: translateY(0); }
@@ -294,7 +323,7 @@
   @media (max-width: 600px) {
     header, .category-tabs, .filter-bar, .grid { padding-left: 20px; padding-right: 20px; }
     header { padding-top: 40px; }
-    .cat-tab { padding: 10px 14px; font-size: 13px; }
+    .cat-tab { padding: 10px 12px; font-size: 13px; }
   }
 </style>
 </head>
@@ -303,11 +332,11 @@
 <header>
   <div class="header-eyebrow">// 주식 차트 학습 노트</div>
   <h1 class="header-title"><span>Chart & Candle</span><br>Study Gallery</h1>
-  <p class="header-desc">차트 패턴과 캔들 패턴을 상승/하락으로 분류하여 정리한 학습 카드 모음입니다.</p>
+  <p class="header-desc">차트 패턴, 캔들 패턴, 투자 용어를 한 곳에서 정리한 학습 카드 모음입니다.</p>
   <div class="header-stats">
     <div class="stat">
       <span class="stat-num" id="stat-total">0</span>
-      <span class="stat-label">전체 패턴</span>
+      <span class="stat-label">전체 카드</span>
     </div>
     <div class="stat">
       <span class="stat-num" id="stat-bull" style="color: var(--green)">0</span>
@@ -317,21 +346,28 @@
       <span class="stat-num" id="stat-bear" style="color: var(--red)">0</span>
       <span class="stat-label">하락 패턴</span>
     </div>
+    <div class="stat">
+      <span class="stat-num" id="stat-term" style="color: var(--indigo)">0</span>
+      <span class="stat-label">용어 설명</span>
+    </div>
   </div>
 </header>
 
 <!-- 최상위 카테고리 탭 -->
-<div class="category-tabs" id="category-tabs">
-  <button class="cat-tab active" onclick="selectCategory('chart', this)">
+<div class="category-tabs">
+  <button class="cat-tab active" data-cat="chart" onclick="selectCategory('chart', this)">
     📈 차트패턴 <span class="tab-count" id="count-chart">0</span>
   </button>
-  <button class="cat-tab" onclick="selectCategory('candle', this)">
+  <button class="cat-tab" data-cat="candle" onclick="selectCategory('candle', this)">
     🕯 캔들패턴 <span class="tab-count" id="count-candle">0</span>
+  </button>
+  <button class="cat-tab" data-cat="term" onclick="selectCategory('term', this)">
+    📖 용어설명 <span class="tab-count" id="count-term">0</span>
   </button>
 </div>
 
-<!-- 하위 필터 -->
-<div class="filter-bar">
+<!-- 하위 필터 (용어설명 탭에서는 숨김) -->
+<div class="filter-bar" id="filter-bar">
   <button class="filter-btn all active" onclick="selectFilter('all', this)">전체</button>
   <button class="filter-btn bull" onclick="selectFilter('bull', this)">📈 상승</button>
   <button class="filter-btn bear" onclick="selectFilter('bear', this)">📉 하락</button>
@@ -341,22 +377,22 @@
 
 <script>
 // =====================================================================
-//  ✏️  패턴 추가는 여기서만!
+//  ✏️  패턴·용어 추가는 여기서만!
 //
 //  category: "chart"  → 차트패턴 탭
 //  category: "candle" → 캔들패턴 탭
-//  type:     "bull"   → 상승
-//  type:     "bear"   → 하락
+//  category: "term"   → 용어설명 탭 (라이트 카드로 자동 렌더링)
+//
+//  type: "bull" / "bear" → 차트·캔들용
+//  type: "term"          → 용어설명용 (필터 없음)
 // =====================================================================
 const PATTERNS = [
 
-  // ── 차트패턴 ─────────────────────────────────────────────────────
+  // ── 차트패턴 ──────────────────────────────────────────────────────
   {
-    category: "chart",
+    category: "chart", type: "bull", tag: "반전형",
     title: "쌍바닥 (W패턴)",
     subtitle: "Double Bottom — 저항 돌파 후 재상승",
-    type: "bull",
-    tag: "반전형",
     file: "chart_pattern_card.html",
     accentColor: "linear-gradient(90deg, #f97316, #22c55e)",
     steps: [
@@ -380,11 +416,9 @@ const PATTERNS = [
   },
 
   {
-    category: "chart",
+    category: "chart", type: "bear", tag: "지속형",
     title: "삼각수렴 하향이탈",
     subtitle: "Descending Triangle — 지지선 이탈 후 급락",
-    type: "bear",
-    tag: "지속형",
     file: "descending_triangle_card.html",
     accentColor: "linear-gradient(90deg, #3b82f6, #ef4444)",
     steps: [
@@ -401,20 +435,15 @@ const PATTERNS = [
         fill="none" stroke="#ef4444" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
       <polyline points="20,30 45,70 80,48 115,70 148,58 183,70 200,78 230,65 265,88"
         fill="none" stroke="#ef4444" stroke-width="6" opacity="0.1" stroke-linejoin="round"/>
-      <circle cx="20" cy="30" r="3" fill="#ef4444" stroke="#0d1117" stroke-width="1.5"/>
-      <circle cx="80" cy="48" r="3" fill="#ef4444" stroke="#0d1117" stroke-width="1.5"/>
-      <circle cx="148" cy="58" r="3" fill="#ef4444" stroke="#0d1117" stroke-width="1.5"/>
       <circle cx="200" cy="78" r="3.5" fill="#ef4444" stroke="#0d1117" stroke-width="1.5"/>
       <polygon points="265,88 259,77 271,77" fill="#ef4444"/>
     `
   },
 
   {
-    category: "chart",
+    category: "chart", type: "bear", tag: "반전형",
     title: "라이징웻지 (Rising Wedge)",
     subtitle: "상승 쐐기형 수렴 후 하향 이탈",
-    type: "bear",
-    tag: "반전형",
     file: "rising_wedge_card.html",
     accentColor: "linear-gradient(90deg, #a855f7, #ef4444)",
     steps: [
@@ -432,87 +461,128 @@ const PATTERNS = [
         fill="none" stroke="#ef4444" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
       <polyline points="20,88 50,62 80,70 115,42 145,52 175,30 188,46 215,65 250,88"
         fill="none" stroke="#ef4444" stroke-width="6" opacity="0.1" stroke-linejoin="round"/>
-      <circle cx="50" cy="62" r="3" fill="#a855f7" stroke="#0d1117" stroke-width="1.5"/>
-      <circle cx="115" cy="42" r="3" fill="#a855f7" stroke="#0d1117" stroke-width="1.5"/>
-      <circle cx="175" cy="30" r="3" fill="#a855f7" stroke="#0d1117" stroke-width="1.5"/>
       <circle cx="188" cy="46" r="3.5" fill="#ef4444" stroke="#0d1117" stroke-width="1.5"/>
       <polygon points="250,88 244,77 256,77" fill="#ef4444"/>
     `
   },
 
   {
-  category: "candle",
-  title: "쌍바닥 장대캔들 적극공략",
-  subtitle: "Double Bottom + 장대양봉 — 조건 충족 시만 진입",
-  type: "bull",
-  tag: "캔들+패턴",
-  file: "double_bottom_candle_card.html",
-  accentColor: "linear-gradient(90deg, #f97316, #22c55e)",
-  steps: [
-    { color: "#ef4444", text: "20일선 외바닥 장대양봉 → SKIP" },
-    { color: "#22c55e", text: "20일선 쌍바닥 + 장대양봉 → GO" },
-    { color: "#f97316", text: "넥라인 돌파 진입 · S-2 아래 손절" },
-  ],
-  svg: `
-    <line x1="0" y1="65" x2="280" y2="65" stroke="#f97316" stroke-width="1.2" stroke-dasharray="4,3" opacity="0.7"/>
-    <polyline points="20,25 65,80 110,45 155,80 210,20 260,10"
-      fill="none" stroke="#22c55e" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
-    <rect x="58" y="38" width="10" height="30" fill="#ef4444" rx="1" opacity="0.7"/>
-    <rect x="148" y="32" width="10" height="30" fill="#ef4444" rx="1" opacity="0.7"/>
-    <rect x="200" y="20" width="10" height="45" fill="#22c55e" rx="1" opacity="0.9"/>
-    <circle cx="65" cy="80" r="3.5" fill="#ef4444" stroke="#0d1117" stroke-width="1.5"/>
-    <circle cx="155" cy="80" r="3.5" fill="#ef4444" stroke="#0d1117" stroke-width="1.5"/>
-    <text x="195" y="15" fill="#22c55e" font-size="9" font-family="JetBrains Mono" font-weight="700">GO★</text>
-    <polygon points="260,10 252,20 268,20" fill="#22c55e"/>
-  `
-},
+    category: "chart", type: "bull", tag: "이동평균선",
+    title: "3파 매수 전략",
+    subtitle: "이동평균선 정배열 완성 시점 매수",
+    file: "ma_3wave_card.html",
+    accentColor: "linear-gradient(90deg, #22c55e, #f59e0b)",
+    steps: [
+      { color: "#22c55e", text: "1파 — 60일선 바닥에서 우상향 반전" },
+      { color: "#f59e0b", text: "2파 — 20일선·60일선 수렴 에너지 응축" },
+      { color: "#22c55e", text: "3파 ⭐ — 정배열 완성 후 매수·본격 상승" },
+    ],
+    svg: `
+      <path d="M 0,85 C 80,83 160,78 240,70 S 380,58 280,48" fill="none" stroke="#a855f7" stroke-width="2" stroke-linecap="round"/>
+      <path d="M 0,95 C 40,93 80,88 110,80 C 140,70 160,55 190,45 C 220,35 260,28 280,22" fill="none" stroke="#22c55e" stroke-width="2.5" stroke-linecap="round"/>
+      <path d="M 40,88 C 60,78 75,65 90,58 C 105,51 118,55 130,52 C 145,49 158,46 175,40 C 192,34 220,22 280,12" fill="none" stroke="#ef4444" stroke-width="1.8" stroke-linecap="round"/>
+      <circle cx="185" cy="40" r="6" fill="#f59e0b" opacity="0.9"/>
+      <line x1="185" y1="10" x2="185" y2="95" stroke="#f59e0b" stroke-width="1" stroke-dasharray="3,3" opacity="0.5"/>
+      <text x="190" y="55" fill="#f59e0b" font-size="9" font-family="JetBrains Mono" font-weight="700">매수★</text>
+      <polygon points="280,12 272,22 288,22" fill="#22c55e"/>
+    `
+  },
 
-{
-  category: "candle",
-  title: "장대캔들 = 세력의 신호",
-  subtitle: "적삼병 · 3일상승 · 세번고점돌파 4가지 패턴",
-  type: "bull",
-  tag: "세력 캔들",
-  file: "seoryeok_candle_card.html",
-  accentColor: "linear-gradient(90deg, #ef4444, #f97316)",
-  steps: [
-    { color: "#ef4444", text: "장대양봉 출현 → 세력 진입 첫 신호" },
-    { color: "#f97316", text: "적삼병 / 3일상승 / 세번고점돌파로 발전" },
-    { color: "#22c55e", text: "거래량 동반 확인 후 매수 판단" },
-  ],
-  svg: `
-    <line x1="0" y1="55" x2="280" y2="55" stroke="#f97316" stroke-width="1" stroke-dasharray="3,3" opacity="0.5"/>
-    <rect x="20" y="28" width="12" height="35" fill="#ef4444" rx="1" opacity="0.9"/>
-    <rect x="50" y="45" width="12" height="25" fill="#ef4444" rx="1" opacity="0.7"/>
-    <rect x="70" y="38" width="12" height="20" fill="#3b82f6" rx="1" opacity="0.7"/>
-    <rect x="90" y="42" width="12" height="22" fill="#ef4444" rx="1" opacity="0.7"/>
-    <rect x="110" y="35" width="12" height="18" fill="#3b82f6" rx="1" opacity="0.7"/>
-    <rect x="140" y="10" width="14" height="45" fill="#ef4444" rx="1" opacity="0.95"/>
-    <text x="148" y="7" fill="#22c55e" font-size="8" font-family="JetBrains Mono" font-weight="700" text-anchor="middle">돌파!</text>
-    <polygon points="200,15 170,30 230,30" fill="none"/>
-    <polyline points="154,10 190,5 230,2" fill="none" stroke="#ef4444" stroke-width="2" stroke-linecap="round"/>
-    <polygon points="230,2 222,8 228,12" fill="#ef4444"/>
-  `
-},
-  
-  // ── 캔들패턴 ─────────────────────────────────────────────────────
-  // 🆕 캔들패턴 추가 예시:
+  // ── 캔들패턴 ──────────────────────────────────────────────────────
+  {
+    category: "candle", type: "bull", tag: "캔들+패턴",
+    title: "쌍바닥 장태캔들 적극공략",
+    subtitle: "Double Bottom + 장대양봉 — 조건 충족 시만 진입",
+    file: "double_bottom_candle_card.html",
+    accentColor: "linear-gradient(90deg, #f97316, #22c55e)",
+    steps: [
+      { color: "#ef4444", text: "20일선 외바닥 장대양봉 → SKIP" },
+      { color: "#22c55e", text: "20일선 쌍바닥 + 장대양봉 → GO" },
+      { color: "#f97316", text: "넥라인 돌파 진입 · S-2 아래 손절" },
+    ],
+    svg: `
+      <line x1="0" y1="55" x2="280" y2="55" stroke="#f97316" stroke-width="1.2" stroke-dasharray="4,3" opacity="0.7"/>
+      <polyline points="20,25 65,80 110,45 155,80 210,20 260,10"
+        fill="none" stroke="#22c55e" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+      <rect x="58" y="38" width="10" height="30" fill="#ef4444" rx="1" opacity="0.7"/>
+      <rect x="148" y="32" width="10" height="30" fill="#ef4444" rx="1" opacity="0.7"/>
+      <rect x="200" y="20" width="10" height="45" fill="#22c55e" rx="1" opacity="0.9"/>
+      <circle cx="65" cy="80" r="3.5" fill="#ef4444" stroke="#0d1117" stroke-width="1.5"/>
+      <circle cx="155" cy="80" r="3.5" fill="#ef4444" stroke="#0d1117" stroke-width="1.5"/>
+      <text x="195" y="15" fill="#22c55e" font-size="9" font-family="JetBrains Mono" font-weight="700">GO★</text>
+      <polygon points="260,10 252,20 268,20" fill="#22c55e"/>
+    `
+  },
+
+  {
+    category: "candle", type: "bull", tag: "세력 캔들",
+    title: "장대캔들 = 세력의 신호",
+    subtitle: "적삼병 · 3일상승 · 세번고점돌파 4가지 패턴",
+    file: "seoryeok_candle_card.html",
+    accentColor: "linear-gradient(90deg, #ef4444, #f97316)",
+    steps: [
+      { color: "#ef4444", text: "장대양봉 출현 → 세력 진입 첫 신호" },
+      { color: "#f97316", text: "적삼병 / 3일상승 / 세번고점돌파로 발전" },
+      { color: "#22c55e", text: "거래량 동반 확인 후 매수 판단" },
+    ],
+    svg: `
+      <line x1="0" y1="55" x2="280" y2="55" stroke="#f97316" stroke-width="1" stroke-dasharray="3,3" opacity="0.5"/>
+      <rect x="20" y="20" width="12" height="42" fill="#ef4444" rx="1" opacity="0.9"/>
+      <rect x="50" y="38" width="12" height="25" fill="#ef4444" rx="1" opacity="0.7"/>
+      <rect x="70" y="32" width="12" height="20" fill="#3b82f6" rx="1" opacity="0.7"/>
+      <rect x="90" y="36" width="12" height="22" fill="#ef4444" rx="1" opacity="0.7"/>
+      <rect x="110" y="30" width="12" height="18" fill="#3b82f6" rx="1" opacity="0.7"/>
+      <rect x="140" y="8" width="14" height="47" fill="#ef4444" rx="1" opacity="0.95"/>
+      <polyline points="154,10 190,5 230,2" fill="none" stroke="#ef4444" stroke-width="2" stroke-linecap="round"/>
+      <polygon points="230,2 222,8 228,12" fill="#ef4444"/>
+      <text x="148" y="65" fill="#22c55e" font-size="8" font-family="JetBrains Mono" font-weight="700">돌파!</text>
+    `
+  },
+
+  // ── 용어설명 ──────────────────────────────────────────────────────
+  {
+    category: "term", type: "term", tag: "투자전략",
+    title: "퀀트 투자 (Quant Investing)",
+    subtitle: "수학·통계·알고리즘으로 감정 없이 데이터만으로 투자 결정을 내리는 방식",
+    file: "quant_investing_card.html",
+    accentColor: "linear-gradient(90deg, #6366f1, #8b5cf6)",
+    steps: [
+      { color: "#6366f1", text: "팩터 발굴 → 전략 설계 → 백테스트" },
+      { color: "#8b5cf6", text: "가치·모멘텀·퀄리티·저변동성 팩터 활용" },
+      { color: "#818cf8", text: "감정 배제 + 알고리즘 자동 실행" },
+    ],
+    svg: `
+      <line x1="0" y1="50" x2="280" y2="50" stroke="#e8ebef" stroke-width="1"/>
+      <line x1="0" y1="80" x2="280" y2="80" stroke="#e8ebef" stroke-width="1"/>
+      <path d="M 10,85 C 50,82 80,70 110,55 C 140,40 160,35 190,28 C 210,23 240,18 270,12"
+        fill="none" stroke="#6366f1" stroke-width="2.5" stroke-linecap="round"/>
+      <path d="M 10,85 C 50,82 80,70 110,55 C 140,40 160,35 190,28 C 210,23 240,18 270,12"
+        fill="none" stroke="#6366f1" stroke-width="8" opacity="0.08" stroke-linecap="round"/>
+      <circle cx="80" cy="70" r="3" fill="#8b5cf6" stroke="#f7f8fa" stroke-width="1.5"/>
+      <circle cx="150" cy="42" r="3" fill="#8b5cf6" stroke="#f7f8fa" stroke-width="1.5"/>
+      <circle cx="220" cy="22" r="3" fill="#8b5cf6" stroke="#f7f8fa" stroke-width="1.5"/>
+      <text x="18" y="45" fill="#6366f1" font-size="8" font-family="JetBrains Mono" opacity="0.7">백테스트</text>
+      <text x="100" y="30" fill="#6366f1" font-size="8" font-family="JetBrains Mono" opacity="0.7">팩터</text>
+      <polygon points="270,12 262,20 278,20" fill="#6366f1"/>
+    `
+  },
+
+  // ── 새 항목 추가 템플릿 ───────────────────────────────────────────
   // {
-  //   category: "candle",
-  //   title: "망치형 (Hammer)",
-  //   subtitle: "하락 추세 끝에 나타나는 강세 반전 신호",
-  //   type: "bull",
-  //   tag: "반전형",
-  //   file: "hammer_candle.html",
-  //   accentColor: "linear-gradient(90deg, #22c55e, #f97316)",
+  //   category: "term",   // "chart" / "candle" / "term"
+  //   type: "term",       // chart·candle은 "bull"/"bear", 용어는 "term"
+  //   tag: "태그",
+  //   title: "용어 이름",
+  //   subtitle: "한 줄 설명",
+  //   file: "파일명.html",
+  //   accentColor: "linear-gradient(90deg, #색상1, #색상2)",
   //   steps: [
-  //     { color: "#ef4444", text: "하락 추세 중 출현" },
-  //     { color: "#f97316", text: "몸통 작고 아래꼬리 길게 형성" },
-  //     { color: "#22c55e", text: "다음 날 양봉 확인 시 매수 신호" },
+  //     { color: "#색상", text: "핵심 포인트 1" },
+  //     { color: "#색상", text: "핵심 포인트 2" },
+  //     { color: "#색상", text: "핵심 포인트 3" },
   //   ],
-  //   svg: `... SVG 내용 ...`
+  //   svg: `... viewBox="0 0 280 100" 기준 SVG ...`
   // },
-
 ];
 
 // =====================================================================
@@ -522,10 +592,11 @@ let currentCategory = 'chart';
 let currentFilter   = 'all';
 
 function getFiltered() {
-  return PATTERNS.filter(p =>
-    p.category === currentCategory &&
-    (currentFilter === 'all' || p.type === currentFilter)
-  );
+  return PATTERNS.filter(p => {
+    if (p.category !== currentCategory) return false;
+    if (currentCategory === 'term') return true;
+    return currentFilter === 'all' || p.type === currentFilter;
+  });
 }
 
 function renderCards() {
@@ -533,23 +604,34 @@ function renderCards() {
   const data = getFiltered();
   grid.innerHTML = '';
 
+  // 용어설명 탭은 필터바 숨김
+  const filterBar = document.getElementById('filter-bar');
+  filterBar.classList.toggle('hidden', currentCategory === 'term');
+
   if (data.length === 0) {
     grid.innerHTML = `
       <div class="empty-state">
         <div class="empty-state-icon">📭</div>
-        <div class="empty-state-text">아직 등록된 패턴이 없어요.<br>PATTERNS 배열에 추가해보세요!</div>
+        <div class="empty-state-text">아직 등록된 항목이 없어요.<br>PATTERNS 배열에 추가해보세요!</div>
       </div>`;
     return;
   }
 
   data.forEach((p, i) => {
+    const isLight = p.category === 'term';
     const card = document.createElement('a');
-    card.className = 'card';
+    card.className = 'card' + (isLight ? ' light' : '');
     card.href = p.file;
     card.dataset.type = p.type;
     card.style.animationDelay = `${0.05 + i * 0.07}s`;
-    const dirLabel  = p.type === 'bull' ? '📈 상승' : '📉 하락';
-    const badgeClass = p.type === 'bull' ? 'badge-bull' : 'badge-bear';
+
+    let dirBadge = '';
+    if (p.type === 'bull') dirBadge = `<span class="badge badge-bull">📈 상승</span>`;
+    else if (p.type === 'bear') dirBadge = `<span class="badge badge-bear">📉 하락</span>`;
+    else dirBadge = `<span class="badge badge-term">📖 용어</span>`;
+
+    const tagBadgeClass = isLight ? 'badge-type-light' : 'badge-type';
+
     card.innerHTML = `
       <div class="card-accent" style="background: ${p.accentColor}"></div>
       <div class="card-chart">
@@ -557,8 +639,8 @@ function renderCards() {
       </div>
       <div class="card-body">
         <div class="card-badges">
-          <span class="badge ${badgeClass}">${dirLabel}</span>
-          <span class="badge badge-type">${p.tag}</span>
+          ${dirBadge}
+          <span class="badge ${tagBadgeClass}">${p.tag}</span>
         </div>
         <div class="card-title">${p.title}</div>
         <div class="card-subtitle">${p.subtitle}</div>
@@ -579,15 +661,13 @@ function renderCards() {
 }
 
 function updateStats() {
-  const all   = PATTERNS;
-  const chart = all.filter(p => p.category === 'chart');
-  const candle = all.filter(p => p.category === 'candle');
-
-  document.getElementById('stat-total').textContent = all.length;
-  document.getElementById('stat-bull').textContent  = all.filter(p => p.type === 'bull').length;
-  document.getElementById('stat-bear').textContent  = all.filter(p => p.type === 'bear').length;
-  document.getElementById('count-chart').textContent  = chart.length;
-  document.getElementById('count-candle').textContent = candle.length;
+  document.getElementById('stat-total').textContent  = PATTERNS.length;
+  document.getElementById('stat-bull').textContent   = PATTERNS.filter(p => p.type === 'bull').length;
+  document.getElementById('stat-bear').textContent   = PATTERNS.filter(p => p.type === 'bear').length;
+  document.getElementById('stat-term').textContent   = PATTERNS.filter(p => p.category === 'term').length;
+  document.getElementById('count-chart').textContent  = PATTERNS.filter(p => p.category === 'chart').length;
+  document.getElementById('count-candle').textContent = PATTERNS.filter(p => p.category === 'candle').length;
+  document.getElementById('count-term').textContent   = PATTERNS.filter(p => p.category === 'term').length;
 }
 
 function selectCategory(cat, btn) {
@@ -596,7 +676,8 @@ function selectCategory(cat, btn) {
   document.querySelectorAll('.cat-tab').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-  document.querySelector('.filter-btn.all').classList.add('active');
+  const allBtn = document.querySelector('.filter-btn.all');
+  if (allBtn) allBtn.classList.add('active');
   renderCards();
 }
 
