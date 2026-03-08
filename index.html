@@ -45,10 +45,11 @@
     z-index: 0;
   }
 
+  /* ── Header ── */
   header {
     position: relative;
     z-index: 1;
-    padding: 60px 40px 40px;
+    padding: 60px 40px 36px;
     max-width: 1100px;
     margin: 0 auto;
     animation: fadeDown 0.6s ease both;
@@ -96,23 +97,87 @@
   .stat-num { font-family: 'JetBrains Mono', monospace; font-size: 22px; font-weight: 700; }
   .stat-label { font-size: 11px; color: var(--dim); text-transform: uppercase; letter-spacing: 0.08em; }
 
+  /* ── Category Tabs (최상위) ── */
+  .category-tabs {
+    position: relative;
+    z-index: 1;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 40px;
+    display: flex;
+    gap: 4px;
+    border-bottom: 1px solid var(--border2);
+    margin-bottom: 0;
+    animation: fadeDown 0.6s 0.08s ease both;
+  }
+
+  .cat-tab {
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    padding: 12px 20px;
+    border: none;
+    background: none;
+    color: var(--muted);
+    cursor: pointer;
+    position: relative;
+    transition: color 0.2s;
+    letter-spacing: -0.01em;
+  }
+
+  .cat-tab::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0; right: 0;
+    height: 2px;
+    background: var(--text);
+    border-radius: 2px 2px 0 0;
+    transform: scaleX(0);
+    transition: transform 0.2s ease;
+  }
+
+  .cat-tab:hover { color: var(--text2); }
+
+  .cat-tab.active {
+    color: var(--text);
+  }
+
+  .cat-tab.active::after {
+    transform: scaleX(1);
+  }
+
+  .cat-tab .tab-count {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 600;
+    background: var(--surface2);
+    border: 1px solid var(--border2);
+    color: var(--dim);
+    padding: 1px 6px;
+    border-radius: 10px;
+    margin-left: 6px;
+    vertical-align: middle;
+  }
+
+  /* ── Filter Bar (하위) ── */
   .filter-bar {
     position: relative;
     z-index: 1;
     max-width: 1100px;
     margin: 0 auto;
-    padding: 0 40px 32px;
+    padding: 20px 40px 28px;
     display: flex;
     gap: 8px;
     flex-wrap: wrap;
-    animation: fadeDown 0.6s 0.1s ease both;
+    animation: fadeDown 0.6s 0.15s ease both;
   }
 
   .filter-btn {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.08em;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
     padding: 6px 14px;
     border-radius: 20px;
     border: 1px solid var(--border2);
@@ -120,7 +185,6 @@
     color: var(--muted);
     cursor: pointer;
     transition: all 0.2s;
-    text-transform: uppercase;
   }
 
   .filter-btn:hover { border-color: var(--border); color: var(--text2); }
@@ -128,6 +192,7 @@
   .filter-btn.bull.active { border-color: var(--green); color: var(--green); background: rgba(34,197,94,0.08); }
   .filter-btn.bear.active { border-color: var(--red); color: var(--red); background: rgba(239,68,68,0.08); }
 
+  /* ── Grid ── */
   .grid {
     position: relative;
     z-index: 1;
@@ -139,6 +204,7 @@
     gap: 20px;
   }
 
+  /* ── Card ── */
   .card {
     background: var(--surface);
     border: 1px solid var(--border2);
@@ -170,16 +236,15 @@
 
   .card-chart svg { width: 100%; height: 100px; }
   .card-body { padding: 20px; }
-  .card-badges { display: flex; gap: 6px; margin-bottom: 10px; }
+  .card-badges { display: flex; gap: 6px; margin-bottom: 10px; flex-wrap: wrap; }
 
   .badge {
-    font-size: 10px;
+    font-size: 11px;
     font-weight: 700;
-    font-family: 'JetBrains Mono', monospace;
+    font-family: 'Noto Sans KR', sans-serif;
     padding: 3px 8px;
     border-radius: 5px;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
+    letter-spacing: -0.02em;
   }
 
   .badge-bull { background: rgba(34,197,94,0.12); color: var(--green); border: 1px solid rgba(34,197,94,0.25); }
@@ -205,27 +270,40 @@
   .card-arrow { font-size: 14px; transition: transform 0.2s; }
   .card:hover .card-arrow { transform: translateX(4px); }
 
+  /* ── Empty state ── */
+  .empty-state {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 80px 20px;
+    color: var(--dim);
+  }
+
+  .empty-state-icon { font-size: 36px; margin-bottom: 12px; }
+  .empty-state-text { font-size: 14px; line-height: 1.6; }
+
+  /* ── Animations ── */
   @keyframes fadeDown {
     from { opacity: 0; transform: translateY(-16px); }
-    to { opacity: 1; transform: translateY(0); }
+    to   { opacity: 1; transform: translateY(0); }
   }
   @keyframes fadeUp {
     from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
+    to   { opacity: 1; transform: translateY(0); }
   }
 
   @media (max-width: 600px) {
-    header, .filter-bar, .grid { padding-left: 20px; padding-right: 20px; }
+    header, .category-tabs, .filter-bar, .grid { padding-left: 20px; padding-right: 20px; }
     header { padding-top: 40px; }
+    .cat-tab { padding: 10px 14px; font-size: 13px; }
   }
 </style>
 </head>
 <body>
 
 <header>
-  <div class="header-eyebrow">// 차트 패턴 학습 노트</div>
-  <h1 class="header-title"><span>Chart Pattern</span><br>Study Gallery</h1>
-  <p class="header-desc">주식 차트의 주요 패턴을 상승/하락으로 분류하여 정리한 학습 카드 모음입니다.</p>
+  <div class="header-eyebrow">// 주식 차트 학습 노트</div>
+  <h1 class="header-title"><span>Chart & Candle</span><br>Study Gallery</h1>
+  <p class="header-desc">차트 패턴과 캔들 패턴을 상승/하락으로 분류하여 정리한 학습 카드 모음입니다.</p>
   <div class="header-stats">
     <div class="stat">
       <span class="stat-num" id="stat-total">0</span>
@@ -242,10 +320,21 @@
   </div>
 </header>
 
+<!-- 최상위 카테고리 탭 -->
+<div class="category-tabs" id="category-tabs">
+  <button class="cat-tab active" onclick="selectCategory('chart', this)">
+    📈 차트패턴 <span class="tab-count" id="count-chart">0</span>
+  </button>
+  <button class="cat-tab" onclick="selectCategory('candle', this)">
+    🕯 캔들패턴 <span class="tab-count" id="count-candle">0</span>
+  </button>
+</div>
+
+<!-- 하위 필터 -->
 <div class="filter-bar">
-  <button class="filter-btn all active" onclick="filter('all', this)">전체</button>
-  <button class="filter-btn bull" onclick="filter('bull', this)">📈 상승</button>
-  <button class="filter-btn bear" onclick="filter('bear', this)">📉 하락</button>
+  <button class="filter-btn all active" onclick="selectFilter('all', this)">전체</button>
+  <button class="filter-btn bull" onclick="selectFilter('bull', this)">📈 상승</button>
+  <button class="filter-btn bear" onclick="selectFilter('bear', this)">📉 하락</button>
 </div>
 
 <div class="grid" id="grid"></div>
@@ -253,15 +342,21 @@
 <script>
 // =====================================================================
 //  ✏️  패턴 추가는 여기서만!
-//  PATTERNS 배열에 아래 형식으로 객체 하나 추가하면 카드가 자동 생성됩니다.
+//
+//  category: "chart"  → 차트패턴 탭
+//  category: "candle" → 캔들패턴 탭
+//  type:     "bull"   → 상승
+//  type:     "bear"   → 하락
 // =====================================================================
 const PATTERNS = [
 
+  // ── 차트패턴 ─────────────────────────────────────────────────────
   {
+    category: "chart",
     title: "쌍바닥 (W패턴)",
     subtitle: "Double Bottom — 저항 돌파 후 재상승",
-    type: "bull",        // "bull" 또는 "bear"
-    category: "반전형",  // 반전형 / 지속형 / 수렴형 등 자유 입력
+    type: "bull",
+    tag: "반전형",
     file: "chart_pattern_card.html",
     accentColor: "linear-gradient(90deg, #f97316, #22c55e)",
     steps: [
@@ -285,10 +380,11 @@ const PATTERNS = [
   },
 
   {
+    category: "chart",
     title: "삼각수렴 하향이탈",
     subtitle: "Descending Triangle — 지지선 이탈 후 급락",
     type: "bear",
-    category: "지속형",
+    tag: "지속형",
     file: "descending_triangle_card.html",
     accentColor: "linear-gradient(90deg, #3b82f6, #ef4444)",
     steps: [
@@ -314,10 +410,11 @@ const PATTERNS = [
   },
 
   {
+    category: "chart",
     title: "라이징웻지 (Rising Wedge)",
     subtitle: "상승 쐐기형 수렴 후 하향 이탈",
     type: "bear",
-    category: "반전형",
+    tag: "반전형",
     file: "rising_wedge_card.html",
     accentColor: "linear-gradient(90deg, #a855f7, #ef4444)",
     steps: [
@@ -343,23 +440,22 @@ const PATTERNS = [
     `
   },
 
-  // =====================================================================
-  //  🆕 새 패턴 추가할 때는 여기에 아래 템플릿을 복사해서 붙여넣고 수정!
-  // =====================================================================
-  //
+  // ── 캔들패턴 ─────────────────────────────────────────────────────
+  // 🆕 캔들패턴 추가 예시:
   // {
-  //   title: "패턴 이름",
-  //   subtitle: "영문명 — 한 줄 설명",
-  //   type: "bull",          // "bull" 또는 "bear"
-  //   category: "반전형",    // 반전형 / 지속형 / 수렴형 등
-  //   file: "파일명.html",   // 연결할 상세 HTML 파일
-  //   accentColor: "linear-gradient(90deg, #색상1, #색상2)",
+  //   category: "candle",
+  //   title: "망치형 (Hammer)",
+  //   subtitle: "하락 추세 끝에 나타나는 강세 반전 신호",
+  //   type: "bull",
+  //   tag: "반전형",
+  //   file: "hammer_candle.html",
+  //   accentColor: "linear-gradient(90deg, #22c55e, #f97316)",
   //   steps: [
-  //     { color: "#색상", text: "1단계 설명" },
-  //     { color: "#색상", text: "2단계 설명" },
-  //     { color: "#색상", text: "3단계 설명" },
+  //     { color: "#ef4444", text: "하락 추세 중 출현" },
+  //     { color: "#f97316", text: "몸통 작고 아래꼬리 길게 형성" },
+  //     { color: "#22c55e", text: "다음 날 양봉 확인 시 매수 신호" },
   //   ],
-  //   svg: `... viewBox="0 0 280 100" 기준 SVG 내용 ...`
+  //   svg: `... SVG 내용 ...`
   // },
 
 ];
@@ -367,18 +463,37 @@ const PATTERNS = [
 // =====================================================================
 //  ⚙️  자동 렌더링 — 수정 불필요
 // =====================================================================
-let currentFilter = 'all';
+let currentCategory = 'chart';
+let currentFilter   = 'all';
 
-function renderCards(data) {
+function getFiltered() {
+  return PATTERNS.filter(p =>
+    p.category === currentCategory &&
+    (currentFilter === 'all' || p.type === currentFilter)
+  );
+}
+
+function renderCards() {
   const grid = document.getElementById('grid');
+  const data = getFiltered();
   grid.innerHTML = '';
+
+  if (data.length === 0) {
+    grid.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-state-icon">📭</div>
+        <div class="empty-state-text">아직 등록된 패턴이 없어요.<br>PATTERNS 배열에 추가해보세요!</div>
+      </div>`;
+    return;
+  }
+
   data.forEach((p, i) => {
     const card = document.createElement('a');
     card.className = 'card';
     card.href = p.file;
     card.dataset.type = p.type;
     card.style.animationDelay = `${0.05 + i * 0.07}s`;
-    const dirLabel = p.type === 'bull' ? '📈 상승' : '📉 하락';
+    const dirLabel  = p.type === 'bull' ? '📈 상승' : '📉 하락';
     const badgeClass = p.type === 'bull' ? 'badge-bull' : 'badge-bear';
     card.innerHTML = `
       <div class="card-accent" style="background: ${p.accentColor}"></div>
@@ -388,7 +503,7 @@ function renderCards(data) {
       <div class="card-body">
         <div class="card-badges">
           <span class="badge ${badgeClass}">${dirLabel}</span>
-          <span class="badge badge-type">${p.category}</span>
+          <span class="badge badge-type">${p.tag}</span>
         </div>
         <div class="card-title">${p.title}</div>
         <div class="card-subtitle">${p.subtitle}</div>
@@ -409,20 +524,36 @@ function renderCards(data) {
 }
 
 function updateStats() {
-  document.getElementById('stat-total').textContent = PATTERNS.length;
-  document.getElementById('stat-bull').textContent = PATTERNS.filter(p => p.type === 'bull').length;
-  document.getElementById('stat-bear').textContent = PATTERNS.filter(p => p.type === 'bear').length;
+  const all   = PATTERNS;
+  const chart = all.filter(p => p.category === 'chart');
+  const candle = all.filter(p => p.category === 'candle');
+
+  document.getElementById('stat-total').textContent = all.length;
+  document.getElementById('stat-bull').textContent  = all.filter(p => p.type === 'bull').length;
+  document.getElementById('stat-bear').textContent  = all.filter(p => p.type === 'bear').length;
+  document.getElementById('count-chart').textContent  = chart.length;
+  document.getElementById('count-candle').textContent = candle.length;
 }
 
-function filter(type, btn) {
+function selectCategory(cat, btn) {
+  currentCategory = cat;
+  currentFilter   = 'all';
+  document.querySelectorAll('.cat-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector('.filter-btn.all').classList.add('active');
+  renderCards();
+}
+
+function selectFilter(type, btn) {
   currentFilter = type;
   document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
-  renderCards(type === 'all' ? PATTERNS : PATTERNS.filter(p => p.type === type));
+  renderCards();
 }
 
-renderCards(PATTERNS);
 updateStats();
+renderCards();
 </script>
 </body>
 </html>
