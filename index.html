@@ -467,6 +467,34 @@ const PATTERNS = [
   `
 },
 
+{
+  category: "candle",
+  title: "장대캔들 = 세력의 신호",
+  subtitle: "적삼병 · 3일상승 · 세번고점돌파 4가지 패턴",
+  type: "bull",
+  tag: "세력 캔들",
+  file: "seoryeok_candle_card.html",
+  accentColor: "linear-gradient(90deg, #ef4444, #f97316)",
+  steps: [
+    { color: "#ef4444", text: "장대양봉 출현 → 세력 진입 첫 신호" },
+    { color: "#f97316", text: "적삼병 / 3일상승 / 세번고점돌파로 발전" },
+    { color: "#22c55e", text: "거래량 동반 확인 후 매수 판단" },
+  ],
+  svg: `
+    <line x1="0" y1="55" x2="280" y2="55" stroke="#f97316" stroke-width="1" stroke-dasharray="3,3" opacity="0.5"/>
+    <rect x="20" y="28" width="12" height="35" fill="#ef4444" rx="1" opacity="0.9"/>
+    <rect x="50" y="45" width="12" height="25" fill="#ef4444" rx="1" opacity="0.7"/>
+    <rect x="70" y="38" width="12" height="20" fill="#3b82f6" rx="1" opacity="0.7"/>
+    <rect x="90" y="42" width="12" height="22" fill="#ef4444" rx="1" opacity="0.7"/>
+    <rect x="110" y="35" width="12" height="18" fill="#3b82f6" rx="1" opacity="0.7"/>
+    <rect x="140" y="10" width="14" height="45" fill="#ef4444" rx="1" opacity="0.95"/>
+    <text x="148" y="7" fill="#22c55e" font-size="8" font-family="JetBrains Mono" font-weight="700" text-anchor="middle">돌파!</text>
+    <polygon points="200,15 170,30 230,30" fill="none"/>
+    <polyline points="154,10 190,5 230,2" fill="none" stroke="#ef4444" stroke-width="2" stroke-linecap="round"/>
+    <polygon points="230,2 222,8 228,12" fill="#ef4444"/>
+  `
+},
+  
   // ── 캔들패턴 ─────────────────────────────────────────────────────
   // 🆕 캔들패턴 추가 예시:
   // {
