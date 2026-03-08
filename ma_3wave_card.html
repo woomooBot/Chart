@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>3파 매수 전략 카드</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #0d1117;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    font-family: 'Noto Sans KR', sans-serif;
+    padding: 40px;
+  }
+  .card {
+    background: linear-gradient(145deg, #161b22, #1c2333);
+    border: 1px solid #30363d;
+    border-radius: 20px;
+    width: 560px;
+    padding: 32px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.05);
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #22c55e, #f59e0b, #22c55e);
+  }
+  .badge-group { display: flex; gap: 8px; align-items: center; margin-bottom: 8px; }
+  .badge {
+    font-size: 11px; font-weight: 700; letter-spacing: -0.02em;
+    padding: 4px 10px; border-radius: 6px;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+  .badge-bull { background: rgba(34,197,94,0.15); color: #22c55e; border: 1px solid rgba(34,197,94,0.3); }
+  .badge-pattern { background: rgba(245,158,11,0.12); color: #f59e0b; border: 1px solid rgba(245,158,11,0.25); }
+  .pattern-title { font-size: 22px; font-weight: 900; color: #f0f6fc; letter-spacing: -0.02em; margin-bottom: 4px; }
+  .pattern-subtitle { font-size: 12px; color: #7d8590; margin-bottom: 24px; }
+
+  /* Chart */
+  .chart-container {
+    background: #0d1117; border: 1px solid #21262d;
+    border-radius: 12px; padding: 16px; margin-bottom: 24px;
+  }
+  .chart-label {
+    font-size: 10px; color: #484f58; font-family: 'JetBrains Mono', monospace;
+    margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.1em;
+  }
+  svg.chart { width: 100%; height: 180px; }
+
+  /* MA Legend */
+  .ma-legend {
+    display: flex; gap: 16px; margin-top: 10px; flex-wrap: wrap;
+  }
+  .ma-item { display: flex; align-items: center; gap: 6px; }
+  .ma-dot { width: 20px; height: 3px; border-radius: 2px; }
+  .ma-label { font-size: 11px; color: #7d8590; font-family: 'JetBrains Mono', monospace; }
+
+  /* Steps */
+  .steps-title {
+    font-size: 11px; color: #484f58; font-weight: 700;
+    letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 12px;
+  }
+  .steps { display: flex; flex-direction: column; gap: 8px; margin-bottom: 24px; }
+  .step { display: flex; align-items: flex-start; gap: 12px; }
+  .step-num {
+    width: 22px; height: 22px; border-radius: 50%;
+    background: #21262d; border: 1px solid #30363d;
+    color: #f59e0b; font-size: 11px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; font-family: 'JetBrains Mono', monospace;
+  }
+  .step-content { flex: 1; padding-top: 2px; }
+  .step-name { font-size: 13px; font-weight: 700; color: #e6edf3; margin-bottom: 1px; }
+  .step-desc { font-size: 11px; color: #7d8590; line-height: 1.4; }
+  .step-value {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    font-weight: 700; white-space: nowrap; padding-top: 2px;
+  }
+
+  .divider { height: 1px; background: #21262d; margin-bottom: 20px; }
+
+  /* Key grid */
+  .key-title {
+    font-size: 11px; color: #484f58; font-weight: 700;
+    letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 12px;
+  }
+  .key-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 20px; }
+  .key-item { background: #161b22; border: 1px solid #21262d; border-radius: 10px; padding: 12px; }
+  .key-item-icon { font-size: 16px; margin-bottom: 6px; }
+  .key-item-label { font-size: 10px; color: #7d8590; font-weight: 500; margin-bottom: 2px; text-transform: uppercase; letter-spacing: 0.05em; }
+  .key-item-value { font-size: 12px; color: #e6edf3; font-weight: 600; line-height: 1.4; }
+
+  /* Buy point highlight */
+  .buy-point {
+    display: flex; align-items: flex-start; gap: 10px;
+    background: rgba(34,197,94,0.07); border: 1px solid rgba(34,197,94,0.2);
+    border-radius: 10px; padding: 14px; margin-bottom: 16px;
+  }
+  .buy-point-icon { font-size: 20px; flex-shrink: 0; }
+  .buy-point-title { font-size: 13px; font-weight: 700; color: #22c55e; margin-bottom: 4px; }
+  .buy-point-desc { font-size: 11px; color: #7d8590; line-height: 1.6; }
+
+  .warning {
+    display: flex; align-items: flex-start; gap: 10px;
+    background: rgba(239,68,68,0.07); border: 1px solid rgba(239,68,68,0.2);
+    border-radius: 10px; padding: 12px;
+  }
+  .warning-icon { font-size: 14px; flex-shrink: 0; margin-top: 1px; }
+  .warning-text { font-size: 11px; color: #f87171; line-height: 1.5; }
+</style>
+</head>
+<body>
+<div class="card">
+
+  <div class="badge-group">
+    <span class="badge badge-bull">📈 상승</span>
+    <span class="badge badge-pattern">이동평균선</span>
+  </div>
+  <div class="pattern-title">3파 매수 전략</div>
+  <div class="pattern-subtitle">이동평균선 정배열 완성 시점 매수 — 60일·20일·240일선 활용</div>
+
+  <!-- Chart -->
+  <div class="chart-container">
+    <div class="chart-label">패턴 시각화</div>
+    <svg class="chart" viewBox="0 0 500 180" xmlns="http://www.w3.org/2000/svg">
+
+      <!-- Grid -->
+      <line x1="0" y1="40" x2="500" y2="40" stroke="#1c2333" stroke-width="1"/>
+      <line x1="0" y1="90" x2="500" y2="90" stroke="#1c2333" stroke-width="1"/>
+      <line x1="0" y1="140" x2="500" y2="140" stroke="#1c2333" stroke-width="1"/>
+
+      <!-- 240일선 (보라, 완만한 우상향) -->
+      <path d="M 0,145 C 80,143 160,138 240,130 S 380,118 500,108"
+        fill="none" stroke="#a855f7" stroke-width="2.5" stroke-linecap="round"/>
+
+      <!-- 60일선 (초록, 먼저 상승 반전) -->
+      <path d="M 0,160 C 40,158 80,155 120,148 C 160,138 180,115 210,95 C 240,75 270,60 310,50 C 350,42 400,38 500,32"
+        fill="none" stroke="#22c55e" stroke-width="2.5" stroke-linecap="round"/>
+
+      <!-- 20일선 (빨강, 단기 파동) -->
+      <path d="M 80,145 C 100,138 115,128 130,110 C 145,92 155,85 170,88 C 185,91 200,95 215,92 C 230,89 245,85 260,82 C 275,79 285,80 295,78 C 310,75 325,70 340,65 C 355,60 370,52 390,42 C 410,32 450,22 500,15"
+        fill="none" stroke="#ef4444" stroke-width="2" stroke-linecap="round"/>
+
+      <!-- 1파 라벨 -->
+      <text x="118" y="168" fill="#22c55e" font-size="11" font-family="Noto Sans KR" font-weight="700">1파</text>
+
+      <!-- 2파 라벨 -->
+      <text x="195" y="72" fill="#22c55e" font-size="11" font-family="Noto Sans KR" font-weight="700">2파</text>
+
+      <!-- 20일선 2파 물결 표시 -->
+      <path d="M 160,88 C 170,82 178,95 188,90 C 198,85 208,92 218,88 C 228,84 238,88 248,83"
+        fill="none" stroke="#ef4444" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
+
+      <!-- 골든크로스 수직선 -->
+      <line x1="310" y1="30" x2="310" y2="155" stroke="#f59e0b" stroke-width="1" stroke-dasharray="4,3" opacity="0.6"/>
+
+      <!-- 매수 포인트 별 -->
+      <circle cx="310" cy="68" r="12" fill="#f59e0b" opacity="0.15"/>
+      <circle cx="310" cy="68" r="7" fill="#f59e0b" opacity="0.9"/>
+      <text x="304" y="72" fill="#0d1117" font-size="9" font-weight="900">★</text>
+
+      <!-- 매수 라벨 -->
+      <text x="318" y="85" fill="#f59e0b" font-size="10" font-family="Noto Sans KR" font-weight="700">매수</text>
+
+      <!-- 3파 라벨 (60일선 위) -->
+      <text x="400" y="28" fill="#22c55e" font-size="11" font-family="Noto Sans KR" font-weight="700">3파 ↗</text>
+
+      <!-- 3파 화살표 (빨강) -->
+      <text x="430" y="15" fill="#ef4444" font-size="10" font-family="Noto Sans KR" font-weight="700">3파</text>
+
+      <!-- 정배열 구간 표시 -->
+      <rect x="305" y="25" width="190" height="125" fill="#22c55e" opacity="0.03" rx="4"/>
+
+      <!-- MA 위치 라벨 (우측) -->
+      <text x="4" y="36" fill="#22c55e" font-size="8" font-family="JetBrains Mono" opacity="0.7">60일</text>
+      <text x="4" y="112" fill="#a855f7" font-size="8" font-family="JetBrains Mono" opacity="0.7">240일</text>
+    </svg>
+
+    <!-- Legend -->
+    <div class="ma-legend">
+      <div class="ma-item">
+        <div class="ma-dot" style="background:#22c55e"></div>
+        <span class="ma-label">60일선 (중기)</span>
+      </div>
+      <div class="ma-item">
+        <div class="ma-dot" style="background:#ef4444"></div>
+        <span class="ma-label">20일선 (단기)</span>
+      </div>
+      <div class="ma-item">
+        <div class="ma-dot" style="background:#a855f7"></div>
+        <span class="ma-label">240일선 (장기)</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Steps -->
+  <div class="steps-title">진행 단계</div>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-content">
+        <div class="step-name">1파 — 60일선 바닥 반전</div>
+        <div class="step-desc">60일선이 하락에서 우상향으로 전환 → 중기 추세 반전 시작</div>
+      </div>
+      <div class="step-value" style="color:#22c55e">↑ 반전</div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-content">
+        <div class="step-name">2파 — 20일선 수렴·교차</div>
+        <div class="step-desc">단기 20일선이 중기 60일선과 수렴하며 에너지 응축</div>
+      </div>
+      <div class="step-value" style="color:#f59e0b">〰 수렴</div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-content">
+        <div class="step-name">3파 ⭐ — 정배열 완성 · 매수</div>
+        <div class="step-desc">20일선이 60일선 상향 돌파 + 240일선까지 정배열 완성</div>
+      </div>
+      <div class="step-value" style="color:#22c55e">✓ 매수</div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-content">
+        <div class="step-name">본격 상승</div>
+        <div class="step-desc">세 이동평균선이 240 → 60 → 20 순서로 정배열 유지하며 상승</div>
+      </div>
+      <div class="step-value" style="color:#22c55e">↑↑ 목표</div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- Buy point -->
+  <div class="buy-point">
+    <div class="buy-point-icon">⭐</div>
+    <div>
+      <div class="buy-point-title">매수 타이밍 4가지 조건</div>
+      <div class="buy-point-desc">
+        ① 60일선이 우상향 중<br>
+        ② 20일선이 60일선을 골든크로스 (하→상 돌파)<br>
+        ③ 240일선이 수평 or 우상향 전환<br>
+        ④ 240 → 60 → 20 순서 정배열 완성
+      </div>
+    </div>
+  </div>
+
+  <!-- Key grid -->
+  <div class="key-title">신뢰도 체크</div>
+  <div class="key-grid">
+    <div class="key-item">
+      <div class="key-item-icon">📊</div>
+      <div class="key-item-label">거래량</div>
+      <div class="key-item-value">골든크로스 시 거래량 증가</div>
+    </div>
+    <div class="key-item">
+      <div class="key-item-icon">📐</div>
+      <div class="key-item-label">60일선 기울기</div>
+      <div class="key-item-value">기울기 클수록 신뢰도 ↑</div>
+    </div>
+    <div class="key-item">
+      <div class="key-item-icon">🕐</div>
+      <div class="key-item-label">240일선 방향</div>
+      <div class="key-item-value">수평→우상향 전환 필수</div>
+    </div>
+    <div class="key-item">
+      <div class="key-item-icon">🎯</div>
+      <div class="key-item-label">손절 기준</div>
+      <div class="key-item-value">60일선 하향 이탈 시</div>
+    </div>
+  </div>
+
+  <div class="warning">
+    <div class="warning-icon">⚠️</div>
+    <div class="warning-text">
+      240일선이 여전히 하락 중이면 신뢰도 낮음 · 골든크로스 직후 바로 데드크로스 나오면 가짜 신호(Fakeout) 주의
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
