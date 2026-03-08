@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>라이징웻지 패턴 카드</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #0d1117;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    font-family: 'Noto Sans KR', sans-serif;
+    padding: 40px;
+  }
+  .card {
+    background: linear-gradient(145deg, #161b22, #1c2333);
+    border: 1px solid #30363d;
+    border-radius: 20px;
+    width: 560px;
+    padding: 32px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.05);
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #a855f7, #ef4444, #a855f7);
+  }
+  .badge-group { display: flex; gap: 8px; align-items: center; margin-bottom: 8px; }
+  .badge {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.08em;
+    padding: 4px 10px; border-radius: 6px; text-transform: uppercase;
+  }
+  .badge-bear { background: rgba(239,68,68,0.15); color: #ef4444; border: 1px solid rgba(239,68,68,0.3); }
+  .badge-pattern { background: rgba(168,85,247,0.12); color: #c084fc; border: 1px solid rgba(168,85,247,0.25); }
+  .pattern-title { font-size: 22px; font-weight: 900; color: #f0f6fc; letter-spacing: -0.02em; margin-bottom: 4px; }
+  .pattern-subtitle { font-size: 12px; color: #7d8590; }
+  .chart-container {
+    background: #0d1117; border: 1px solid #21262d;
+    border-radius: 12px; padding: 16px; margin-bottom: 24px;
+  }
+  .chart-label {
+    font-size: 10px; color: #484f58; font-family: 'JetBrains Mono', monospace;
+    margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.1em;
+  }
+  svg.chart { width: 100%; height: 170px; }
+  .steps-title {
+    font-size: 11px; color: #484f58; font-weight: 700;
+    letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 12px;
+  }
+  .steps { display: flex; flex-direction: column; gap: 8px; margin-bottom: 24px; }
+  .step { display: flex; align-items: flex-start; gap: 12px; }
+  .step-num {
+    width: 22px; height: 22px; border-radius: 50%;
+    background: #21262d; border: 1px solid #30363d;
+    color: #c084fc; font-size: 11px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; font-family: 'JetBrains Mono', monospace;
+  }
+  .step-content { flex: 1; padding-top: 2px; }
+  .step-name { font-size: 13px; font-weight: 700; color: #e6edf3; margin-bottom: 1px; }
+  .step-desc { font-size: 11px; color: #7d8590; line-height: 1.4; }
+  .step-value {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    color: #c084fc; font-weight: 700; white-space: nowrap; padding-top: 2px;
+  }
+  .divider { height: 1px; background: #21262d; margin-bottom: 20px; }
+  .key-title {
+    font-size: 11px; color: #484f58; font-weight: 700;
+    letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 12px;
+  }
+  .key-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 20px; }
+  .key-item { background: #161b22; border: 1px solid #21262d; border-radius: 10px; padding: 12px; }
+  .key-item-icon { font-size: 16px; margin-bottom: 6px; }
+  .key-item-label { font-size: 10px; color: #7d8590; font-weight: 500; margin-bottom: 2px; text-transform: uppercase; letter-spacing: 0.05em; }
+  .key-item-value { font-size: 12px; color: #e6edf3; font-weight: 600; line-height: 1.4; }
+  .warning {
+    display: flex; align-items: flex-start; gap: 10px;
+    background: rgba(239,68,68,0.07); border: 1px solid rgba(239,68,68,0.2);
+    border-radius: 10px; padding: 12px;
+  }
+  .warning-icon { font-size: 14px; flex-shrink: 0; margin-top: 1px; }
+  .warning-text { font-size: 11px; color: #f87171; line-height: 1.5; }
+</style>
+</head>
+<body>
+<div class="card">
+
+  <div class="badge-group">
+    <span class="badge badge-bear">📉 하락</span>
+    <span class="badge badge-pattern">반전형</span>
+  </div>
+  <div class="pattern-title" style="margin-bottom:4px">라이징웻지 (Rising Wedge)</div>
+  <div class="pattern-subtitle" style="margin-bottom:24px">상승하는 쐐기형 수렴 후 하향 이탈 — 상승 중 나타나는 약세 반전 신호</div>
+
+  <!-- Chart -->
+  <div class="chart-container">
+    <div class="chart-label">패턴 시각화</div>
+    <svg class="chart" viewBox="0 0 500 170" xmlns="http://www.w3.org/2000/svg">
+
+      <!-- Grid -->
+      <line x1="0" y1="35" x2="500" y2="35" stroke="#1c2333" stroke-width="1"/>
+      <line x1="0" y1="90" x2="500" y2="90" stroke="#1c2333" stroke-width="1"/>
+      <line x1="0" y1="140" x2="500" y2="140" stroke="#1c2333" stroke-width="1"/>
+
+      <!-- Upper resistance line (rising, steeper) -->
+      <line x1="40" y1="130" x2="300" y2="28" stroke="#a855f7" stroke-width="1.5" stroke-dasharray="6,4" opacity="0.8"/>
+
+      <!-- Lower support line (rising, less steep) -->
+      <line x1="40" y1="148" x2="300" y2="75" stroke="#a855f7" stroke-width="1.5" stroke-dasharray="6,4" opacity="0.5"/>
+
+      <!-- Wedge fill -->
+      <polygon
+        points="40,130 300,28 300,75 40,148"
+        fill="#a855f7" opacity="0.04"
+      />
+
+      <!-- Price path inside wedge -->
+      <polyline
+        points="40,148 80,105 120,115 160,72 200,88 240,52 280,65 305,80 340,110 390,130 440,155"
+        fill="none"
+        stroke="#ef4444"
+        stroke-width="2.5"
+        stroke-linejoin="round"
+        stroke-linecap="round"
+      />
+      <!-- Glow -->
+      <polyline
+        points="40,148 80,105 120,115 160,72 200,88 240,52 280,65 305,80 340,110 390,130 440,155"
+        fill="none"
+        stroke="#ef4444"
+        stroke-width="7"
+        opacity="0.10"
+        stroke-linejoin="round"
+        stroke-linecap="round"
+      />
+
+      <!-- High markers (rising) -->
+      <circle cx="80" cy="105" r="4" fill="#a855f7" stroke="#0d1117" stroke-width="2"/>
+      <text x="68" y="97" fill="#a855f7" font-size="9" font-family="JetBrains Mono">고①</text>
+
+      <circle cx="160" cy="72" r="4" fill="#a855f7" stroke="#0d1117" stroke-width="2"/>
+      <text x="148" y="64" fill="#a855f7" font-size="9" font-family="JetBrains Mono">고②</text>
+
+      <circle cx="240" cy="52" r="4" fill="#a855f7" stroke="#0d1117" stroke-width="2"/>
+      <text x="228" y="44" fill="#a855f7" font-size="9" font-family="JetBrains Mono">고③</text>
+
+      <!-- Low markers (rising but slower) -->
+      <circle cx="120" cy="115" r="3" fill="#c084fc" stroke="#0d1117" stroke-width="2"/>
+      <circle cx="200" cy="88" r="3" fill="#c084fc" stroke="#0d1117" stroke-width="2"/>
+      <circle cx="280" cy="65" r="3" fill="#c084fc" stroke="#0d1117" stroke-width="2"/>
+
+      <!-- Breakdown point -->
+      <circle cx="305" cy="80" r="5" fill="#ef4444" stroke="#0d1117" stroke-width="2"/>
+      <text x="310" y="73" fill="#ef4444" font-size="9" font-family="JetBrains Mono" font-weight="700">이탈!</text>
+
+      <!-- Down arrow at end -->
+      <polygon points="440,155 432,143 448,143" fill="#ef4444"/>
+
+      <!-- Labels -->
+      <text x="4" y="38" fill="#484f58" font-size="8" font-family="JetBrains Mono">고</text>
+      <text x="4" y="144" fill="#484f58" font-size="8" font-family="JetBrains Mono">저</text>
+
+      <!-- Resistance label -->
+      <text x="308" y="30" fill="#a855f7" font-size="9" font-family="JetBrains Mono" opacity="0.8">저항선↗</text>
+      <text x="308" y="78" fill="#a855f7" font-size="9" font-family="JetBrains Mono" opacity="0.6">지지선↗</text>
+    </svg>
+  </div>
+
+  <!-- Steps -->
+  <div class="steps-title">진행 단계</div>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-content">
+        <div class="step-name">고점 & 저점 동반 상승</div>
+        <div class="step-desc">고점도 높아지고 저점도 높아지며 상승 → 겉보기엔 강세</div>
+      </div>
+      <div class="step-value">↑ 상승</div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-content">
+        <div class="step-name">쐐기형 수렴</div>
+        <div class="step-desc">저항선 기울기 > 지지선 기울기 → 점점 좁아지는 쐐기 형성</div>
+      </div>
+      <div class="step-value">🔻 수렴</div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-content">
+        <div class="step-name">거래량 감소</div>
+        <div class="step-desc">상승하지만 거래량은 줄어드는 상승 모멘텀 약화 신호</div>
+      </div>
+      <div class="step-value">📉 약화</div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-content">
+        <div class="step-name">지지선 하향 이탈</div>
+        <div class="step-desc">하단 지지선 붕괴 → 매도 신호 발생</div>
+      </div>
+      <div class="step-value" style="color:#ef4444">❌ 이탈</div>
+    </div>
+    <div class="step">
+      <div class="step-num">5</div>
+      <div class="step-content">
+        <div class="step-name">급락 전환</div>
+        <div class="step-desc">패턴 높이만큼 하락, 이전 지지선이 저항선으로 전환</div>
+      </div>
+      <div class="step-value" style="color:#ef4444">↓↓ 급락</div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="key-title">신뢰도 체크</div>
+  <div class="key-grid">
+    <div class="key-item">
+      <div class="key-item-icon">📊</div>
+      <div class="key-item-label">거래량</div>
+      <div class="key-item-value">수렴 중 감소, 이탈 시 급증</div>
+    </div>
+    <div class="key-item">
+      <div class="key-item-icon">📐</div>
+      <div class="key-item-label">쐐기 기울기</div>
+      <div class="key-item-value">저항 > 지지 기울기일수록 신뢰↑</div>
+    </div>
+    <div class="key-item">
+      <div class="key-item-icon">🔄</div>
+      <div class="key-item-label">지지→저항 전환</div>
+      <div class="key-item-value">이탈 후 리테스트 확인</div>
+    </div>
+    <div class="key-item">
+      <div class="key-item-icon">🎯</div>
+      <div class="key-item-label">목표가</div>
+      <div class="key-item-value">쐐기 최대 높이만큼 하락</div>
+    </div>
+  </div>
+
+  <div class="warning">
+    <div class="warning-icon">⚠️</div>
+    <div class="warning-text">
+      상승 추세 중 나타나면 추세 반전 신호 · 횡보 중 나타나면 하락 지속 신호 · 상향 돌파 시 강한 추가 상승 가능 (역발상 주의)
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
