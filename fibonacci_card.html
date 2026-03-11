@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>피보나치 이론 카드</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #0d1117;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    font-family: 'Noto Sans KR', sans-serif;
+    padding: 40px;
+  }
+  .card {
+    background: linear-gradient(145deg, #161b22, #1c2333);
+    border: 1px solid #30363d;
+    border-radius: 20px;
+    width: 560px;
+    padding: 32px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.05);
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #f59e0b, #10b981, #f59e0b);
+  }
+
+  .badge-group { display: flex; gap: 8px; align-items: center; margin-bottom: 8px; }
+  .badge {
+    font-size: 11px; font-weight: 700; letter-spacing: -0.02em;
+    padding: 4px 10px; border-radius: 6px;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+  .badge-fib   { background: rgba(245,158,11,0.12); color: #f59e0b; border: 1px solid rgba(245,158,11,0.25); }
+  .badge-theory { background: rgba(16,185,129,0.12); color: #10b981; border: 1px solid rgba(16,185,129,0.25); }
+
+  .pattern-title { font-size: 22px; font-weight: 900; color: #f0f6fc; letter-spacing: -0.02em; margin-bottom: 4px; }
+  .pattern-subtitle { font-size: 12px; color: #7d8590; margin-bottom: 24px; line-height: 1.5; }
+
+  .section-title {
+    font-size: 11px; color: #484f58; font-weight: 700;
+    letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 12px;
+  }
+  .divider { height: 1px; background: #21262d; margin-bottom: 20px; }
+
+  /* Chart */
+  .chart-container {
+    background: #0d1117; border: 1px solid #21262d;
+    border-radius: 12px; padding: 16px; margin-bottom: 24px;
+  }
+  .chart-label {
+    font-size: 10px; color: #484f58; font-family: 'JetBrains Mono', monospace;
+    margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.1em;
+  }
+
+  /* 되돌림 레벨 바 */
+  .fib-levels { display: flex; flex-direction: column; gap: 6px; margin-bottom: 24px; }
+  .fib-row {
+    display: flex; align-items: center; gap: 10px;
+  }
+  .fib-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; font-weight: 700;
+    width: 52px; flex-shrink: 0; text-align: right;
+  }
+  .fib-bar-wrap { flex: 1; height: 20px; background: #0d1117; border-radius: 4px; overflow: hidden; position: relative; border: 1px solid #21262d; }
+  .fib-bar { height: 100%; border-radius: 4px; display: flex; align-items: center; padding-left: 8px; }
+  .fib-bar-text { font-size: 10px; font-weight: 600; color: rgba(255,255,255,0.8); font-family: 'Noto Sans KR', sans-serif; white-space: nowrap; }
+  .fib-star { font-size: 11px; flex-shrink: 0; width: 16px; }
+
+  /* 탭 패널 */
+  .tabs { display: flex; gap: 4px; margin-bottom: 12px; }
+  .tab-btn {
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 11px; font-weight: 700;
+    padding: 5px 12px; border-radius: 6px;
+    border: 1px solid #21262d; background: #161b22;
+    color: #7d8590; cursor: pointer; transition: all 0.2s;
+    letter-spacing: -0.01em;
+  }
+  .tab-btn.active { background: #21262d; border-color: #30363d; color: #e6edf3; }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* 테이블 */
+  .fib-table { width: 100%; border-collapse: collapse; font-size: 12px; margin-bottom: 0; }
+  .fib-table th {
+    background: #0d1117; color: #484f58; font-weight: 700;
+    padding: 8px 10px; text-align: left; border-bottom: 1px solid #21262d;
+    font-size: 10px; letter-spacing: 0.05em; text-transform: uppercase;
+  }
+  .fib-table td {
+    padding: 8px 10px; border-bottom: 1px solid #1c2333;
+    color: #7d8590; vertical-align: middle;
+  }
+  .fib-table tr:last-child td { border-bottom: none; }
+  .fib-table td:first-child {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700; color: #f59e0b;
+  }
+  .fib-table td.wave { color: #e6edf3; font-weight: 600; }
+  .fib-table td.ratio { font-family: 'JetBrains Mono', monospace; color: #10b981; font-weight: 700; }
+  .highlight-row td { background: rgba(245,158,11,0.05); }
+  .highlight-row td:first-child { color: #f59e0b; }
+
+  /* 활용법 */
+  .usage-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 20px; }
+  .usage-item {
+    background: #161b22; border: 1px solid #21262d;
+    border-radius: 10px; padding: 12px;
+  }
+  .usage-icon { font-size: 15px; margin-bottom: 5px; }
+  .usage-name { font-size: 12px; font-weight: 700; color: #e6edf3; margin-bottom: 3px; }
+  .usage-desc { font-size: 11px; color: #7d8590; line-height: 1.4; }
+
+  /* 핵심 포인트 */
+  .golden {
+    display: flex; align-items: flex-start; gap: 10px;
+    background: rgba(245,158,11,0.07); border: 1px solid rgba(245,158,11,0.2);
+    border-radius: 10px; padding: 14px; margin-bottom: 16px;
+  }
+  .golden-icon { font-size: 20px; flex-shrink: 0; }
+  .golden-title { font-size: 13px; font-weight: 700; color: #f59e0b; margin-bottom: 4px; }
+  .golden-desc { font-size: 11px; color: #7d8590; line-height: 1.6; }
+  .golden-desc strong { color: #e6edf3; }
+
+  .warning {
+    display: flex; align-items: flex-start; gap: 10px;
+    background: rgba(239,68,68,0.07); border: 1px solid rgba(239,68,68,0.2);
+    border-radius: 10px; padding: 12px;
+  }
+  .warning-icon { font-size: 14px; flex-shrink: 0; margin-top: 1px; }
+  .warning-text { font-size: 11px; color: #f87171; line-height: 1.5; }
+</style>
+</head>
+<body>
+<div class="card">
+
+  <div class="badge-group">
+    <span class="badge badge-fib">📐 피보나치</span>
+    <span class="badge badge-theory">지지/저항 이론</span>
+  </div>
+  <div class="pattern-title">피보나치 이론</div>
+  <div class="pattern-subtitle">Fibonacci Theory — 자연계 황금비율을 이용한 지지·저항·목표가 예측 이론</div>
+
+  <!-- Chart -->
+  <div class="chart-container">
+    <div class="chart-label">되돌림 레벨 시각화</div>
+    <svg width="100%" viewBox="0 0 500 190" xmlns="http://www.w3.org/2000/svg">
+
+      <!-- 배경 레벨 구역 -->
+      <rect x="60" y="20"  width="380" height="18" fill="rgba(245,158,11,0.04)" rx="2"/>
+      <rect x="60" y="58"  width="380" height="18" fill="rgba(16,185,129,0.04)" rx="2"/>
+      <rect x="60" y="84"  width="380" height="18" fill="rgba(96,165,250,0.05)" rx="2"/>
+      <rect x="60" y="108" width="380" height="18" fill="rgba(245,158,11,0.10)" rx="3"/>
+      <rect x="60" y="134" width="380" height="18" fill="rgba(239,68,68,0.04)" rx="2"/>
+
+      <!-- 레벨 수평선 -->
+      <line x1="60" y1="20"  x2="440" y2="20"  stroke="#f59e0b" stroke-width="1" opacity="0.4"/>
+      <line x1="60" y1="58"  x2="440" y2="58"  stroke="#10b981" stroke-width="1" opacity="0.5"/>
+      <line x1="60" y1="84"  x2="440" y2="84"  stroke="#60a5fa" stroke-width="1" opacity="0.5"/>
+      <line x1="60" y1="108" x2="440" y2="108" stroke="#f59e0b" stroke-width="2" opacity="0.8"/>
+      <line x1="60" y1="134" x2="440" y2="134" stroke="#ef4444" stroke-width="1" opacity="0.4"/>
+      <line x1="60" y1="168" x2="440" y2="168" stroke="#7d8590" stroke-width="1" opacity="0.3"/>
+
+      <!-- 레벨 라벨 (좌측) -->
+      <text x="0"  y="24"  fill="#f59e0b" font-size="9" font-family="JetBrains Mono" font-weight="700">0%</text>
+      <text x="0"  y="62"  fill="#10b981" font-size="9" font-family="JetBrains Mono" font-weight="700">23.6</text>
+      <text x="0"  y="88"  fill="#60a5fa" font-size="9" font-family="JetBrains Mono" font-weight="700">38.2</text>
+      <text x="0"  y="112" fill="#f59e0b" font-size="9" font-family="JetBrains Mono" font-weight="700">61.8</text>
+      <text x="0"  y="138" fill="#ef4444" font-size="9" font-family="JetBrains Mono" font-weight="700">78.6</text>
+      <text x="0"  y="172" fill="#7d8590" font-size="9" font-family="JetBrains Mono" font-weight="700">100%</text>
+
+      <!-- 가격 움직임 (상승 후 되돌림) -->
+      <!-- 상승 구간 -->
+      <line x1="80" y1="168" x2="200" y2="20" stroke="#22c55e" stroke-width="2.5" stroke-linecap="round"/>
+      <circle cx="80"  cy="168" r="4" fill="#7d8590" stroke="#0d1117" stroke-width="1.5"/>
+      <circle cx="200" cy="20"  r="4" fill="#22c55e" stroke="#0d1117" stroke-width="1.5"/>
+      <text x="205" y="18" fill="#22c55e" font-size="9" font-family="JetBrains Mono">고점</text>
+
+      <!-- 되돌림 구간 -->
+      <polyline
+        points="200,20 220,40 235,30 255,58 270,48 295,75 310,65 335,108 355,95 380,134 400,120 420,145"
+        fill="none" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+
+      <!-- 61.8% 지지 강조 -->
+      <circle cx="335" cy="108" r="6" fill="#f59e0b" opacity="0.2"/>
+      <circle cx="335" cy="108" r="4" fill="#f59e0b" stroke="#0d1117" stroke-width="1.5"/>
+      <text x="342" y="106" fill="#f59e0b" font-size="9" font-family="Noto Sans KR" font-weight="700">황금비율 ★</text>
+
+      <!-- 저점 -->
+      <text x="72" y="182" fill="#7d8590" font-size="9" font-family="JetBrains Mono">저점</text>
+    </svg>
+  </div>
+
+  <!-- 되돌림 레벨 바 -->
+  <div class="section-title">주요 피보나치 레벨</div>
+  <div class="fib-levels">
+    <div class="fib-row">
+      <div class="fib-label" style="color:#10b981">23.6%</div>
+      <div class="fib-bar-wrap">
+        <div class="fib-bar" style="width:24%; background:rgba(16,185,129,0.25)">
+          <span class="fib-bar-text">얕은 되돌림 — 강한 추세에서 발생</span>
+        </div>
+      </div>
+      <div class="fib-star"> </div>
+    </div>
+    <div class="fib-row">
+      <div class="fib-label" style="color:#60a5fa">38.2%</div>
+      <div class="fib-bar-wrap">
+        <div class="fib-bar" style="width:38%; background:rgba(96,165,250,0.2)">
+          <span class="fib-bar-text">1차 지지 — 건강한 조정</span>
+        </div>
+      </div>
+      <div class="fib-star"> </div>
+    </div>
+    <div class="fib-row">
+      <div class="fib-label" style="color:#a78bfa">50.0%</div>
+      <div class="fib-bar-wrap">
+        <div class="fib-bar" style="width:50%; background:rgba(167,139,250,0.2)">
+          <span class="fib-bar-text">심리적 중간 — 많이 주목하는 구간</span>
+        </div>
+      </div>
+      <div class="fib-star"> </div>
+    </div>
+    <div class="fib-row">
+      <div class="fib-label" style="color:#f59e0b">61.8%</div>
+      <div class="fib-bar-wrap" style="border-color:rgba(245,158,11,0.3)">
+        <div class="fib-bar" style="width:62%; background:rgba(245,158,11,0.25)">
+          <span class="fib-bar-text" style="color:#f59e0b; font-weight:800">황금비율 — 가장 강력한 지지/저항</span>
+        </div>
+      </div>
+      <div class="fib-star">⭐</div>
+    </div>
+    <div class="fib-row">
+      <div class="fib-label" style="color:#ef4444">78.6%</div>
+      <div class="fib-bar-wrap">
+        <div class="fib-bar" style="width:79%; background:rgba(239,68,68,0.15)">
+          <span class="fib-bar-text">깊은 되돌림 — 추세 전환 가능성</span>
+        </div>
+      </div>
+      <div class="fib-star"> </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- 탭: 되돌림 / 확장 / 엘리엇 연결 -->
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('retracement', this)">되돌림 활용</button>
+    <button class="tab-btn" onclick="switchTab('extension', this)">확장 목표가</button>
+    <button class="tab-btn" onclick="switchTab('elliott', this)">엘리엇 연결</button>
+  </div>
+
+  <div id="tab-retracement" class="tab-panel active" style="margin-bottom:20px">
+    <table class="fib-table">
+      <tr><th>레벨</th><th>활용</th><th>특징</th></tr>
+      <tr><td>23.6%</td><td class="wave">얕은 조정 후 매수</td><td>추세가 매우 강할 때</td></tr>
+      <tr><td>38.2%</td><td class="wave">1차 지지에서 매수</td><td>건강한 상승 추세</td></tr>
+      <tr><td>50.0%</td><td class="wave">중간 지지 확인</td><td>심리적 균형점</td></tr>
+      <tr class="highlight-row"><td>61.8%</td><td class="wave">황금비율 지지 매수</td><td>⭐ 가장 강력한 구간</td></tr>
+      <tr><td>78.6%</td><td class="wave">마지막 지지 확인</td><td>이탈 시 추세 전환</td></tr>
+    </table>
+  </div>
+
+  <div id="tab-extension" class="tab-panel" style="margin-bottom:20px">
+    <table class="fib-table">
+      <tr><th>레벨</th><th>의미</th><th>활용</th></tr>
+      <tr><td>100%</td><td class="wave">직전 고점 동일</td><td>1차 저항선</td></tr>
+      <tr><td>127.2%</td><td class="wave">1차 목표가</td><td>보수적 목표</td></tr>
+      <tr class="highlight-row"><td>161.8%</td><td class="wave">황금비율 목표가</td><td>⭐ 핵심 목표가</td></tr>
+      <tr><td>200%</td><td class="wave">2배 확장</td><td>강한 추세</td></tr>
+      <tr><td>261.8%</td><td class="wave">강한 추세 목표가</td><td>최종 목표</td></tr>
+    </table>
+  </div>
+
+  <div id="tab-elliott" class="tab-panel" style="margin-bottom:20px">
+    <table class="fib-table">
+      <tr><th>파동</th><th>피보나치 비율</th><th>설명</th></tr>
+      <tr><td>2파</td><td class="ratio">50~61.8%</td><td>1파의 되돌림 구간</td></tr>
+      <tr class="highlight-row"><td>3파</td><td class="ratio">161.8%</td><td>⭐ 1파 기준 목표가</td></tr>
+      <tr><td>4파</td><td class="ratio">38.2%</td><td>3파의 되돌림 구간</td></tr>
+      <tr><td>5파</td><td class="ratio">61.8~100%</td><td>1파와 동일하거나 유사</td></tr>
+      <tr><td>c파</td><td class="ratio">100~161.8%</td><td>a파 기준 하락 목표</td></tr>
+    </table>
+  </div>
+
+  <!-- 황금비율 포인트 -->
+  <div class="golden">
+    <div class="golden-icon">✨</div>
+    <div>
+      <div class="golden-title">황금비율 61.8% — 가장 중요한 레벨</div>
+      <div class="golden-desc">
+        자연계 나선형·인체 비율·건축물에서 공통으로 나타나는 비율이에요.<br>
+        주식에서도 <strong>61.8% 되돌림 구간에서 강한 지지/저항</strong>이 자주 발생해요.<br>
+        엘리엇 2파 되돌림 + 61.8% 겹침 = <strong>최적 매수 포인트</strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- 활용법 -->
+  <div class="usage-grid">
+    <div class="usage-item">
+      <div class="usage-icon">🎯</div>
+      <div class="usage-name">지지·저항 예측</div>
+      <div class="usage-desc">상승 후 조정 시 어디서 멈출지 레벨로 예측</div>
+    </div>
+    <div class="usage-item">
+      <div class="usage-icon">📐</div>
+      <div class="usage-name">목표가 산출</div>
+      <div class="usage-desc">확장 비율로 상승 목표가를 사전에 설정</div>
+    </div>
+    <div class="usage-item">
+      <div class="usage-icon">🛡</div>
+      <div class="usage-name">손절 설정</div>
+      <div class="usage-desc">78.6% 이탈 시 해당 레벨 아래로 손절</div>
+    </div>
+    <div class="usage-item">
+      <div class="usage-icon">🔗</div>
+      <div class="usage-name">엘리엇 파동 결합</div>
+      <div class="usage-desc">파동 카운팅 + 피보나치 = 신뢰도 극대화</div>
+    </div>
+  </div>
+
+  <div class="warning">
+    <div class="warning-icon">⚠️</div>
+    <div class="warning-text">
+      피보나치 레벨은 정확한 예측이 아닌 확률 높은 구간 — 반드시 이동평균선·거래량과 병행 · 여러 레벨이 겹치는 구간(클러스터)일수록 신뢰도 상승
+    </div>
+  </div>
+
+</div>
+
+<script>
+function switchTab(id, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+</script>
+</body>
+</html>
