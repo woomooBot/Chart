@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>쌍바닥 장태캔들 적극공략 카드</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #0d1117;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    font-family: 'Noto Sans KR', sans-serif;
+    padding: 40px;
+  }
+  .card {
+    background: linear-gradient(145deg, #161b22, #1c2333);
+    border: 1px solid #30363d;
+    border-radius: 20px;
+    width: 560px;
+    padding: 32px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.05);
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #f97316, #22c55e, #f97316);
+  }
+  .badge-group { display: flex; gap: 8px; align-items: center; margin-bottom: 8px; }
+  .badge {
+    font-size: 11px; font-weight: 700; letter-spacing: -0.02em;
+    padding: 4px 10px; border-radius: 6px;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+  .badge-bull { background: rgba(34,197,94,0.15); color: #22c55e; border: 1px solid rgba(34,197,94,0.3); }
+  .badge-candle { background: rgba(249,115,22,0.12); color: #f97316; border: 1px solid rgba(249,115,22,0.25); }
+  .pattern-title { font-size: 22px; font-weight: 900; color: #f0f6fc; letter-spacing: -0.02em; margin-bottom: 4px; }
+  .pattern-subtitle { font-size: 12px; color: #7d8590; margin-bottom: 24px; }
+
+  /* Section title */
+  .section-title {
+    font-size: 11px; color: #484f58; font-weight: 700;
+    letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 12px;
+  }
+
+  /* Chart container */
+  .chart-container {
+    background: #0d1117; border: 1px solid #21262d;
+    border-radius: 12px; padding: 16px; margin-bottom: 16px;
+  }
+  .chart-label {
+    font-size: 10px; color: #484f58; font-family: 'JetBrains Mono', monospace;
+    margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.1em;
+  }
+  svg.chart { width: 100%; }
+
+  /* Compare box */
+  .compare-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 24px;
+  }
+  .compare-item {
+    border-radius: 10px; padding: 14px;
+    border: 1px solid;
+  }
+  .compare-item.skip {
+    background: rgba(239,68,68,0.05);
+    border-color: rgba(239,68,68,0.15);
+  }
+  .compare-item.go {
+    background: rgba(34,197,94,0.07);
+    border-color: rgba(34,197,94,0.2);
+  }
+  .compare-label {
+    font-size: 11px; font-weight: 700; margin-bottom: 6px;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .compare-label.red { color: #ef4444; }
+  .compare-label.green { color: #22c55e; }
+  .compare-desc { font-size: 11px; color: #7d8590; line-height: 1.5; }
+
+  /* Steps */
+  .steps { display: flex; flex-direction: column; gap: 8px; margin-bottom: 24px; }
+  .step { display: flex; align-items: flex-start; gap: 12px; }
+  .step-num {
+    width: 22px; height: 22px; border-radius: 50%;
+    background: #21262d; border: 1px solid #30363d;
+    color: #f97316; font-size: 11px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; font-family: 'JetBrains Mono', monospace;
+  }
+  .step-content { flex: 1; padding-top: 2px; }
+  .step-name { font-size: 13px; font-weight: 700; color: #e6edf3; margin-bottom: 1px; }
+  .step-desc { font-size: 11px; color: #7d8590; line-height: 1.4; }
+  .step-value {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    font-weight: 700; white-space: nowrap; padding-top: 2px;
+  }
+
+  .divider { height: 1px; background: #21262d; margin-bottom: 20px; }
+
+  /* Trade plan */
+  .trade-plan {
+    display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px;
+  }
+  .trade-row {
+    display: flex; align-items: center; gap: 12px;
+    background: #161b22; border: 1px solid #21262d;
+    border-radius: 10px; padding: 12px;
+  }
+  .trade-icon { font-size: 16px; flex-shrink: 0; }
+  .trade-label { font-size: 11px; color: #7d8590; width: 64px; flex-shrink: 0; font-weight: 600; }
+  .trade-value { font-size: 12px; color: #e6edf3; font-weight: 700; flex: 1; }
+  .trade-badge {
+    font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 5px;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+  .trade-badge.green { background: rgba(34,197,94,0.15); color: #22c55e; }
+  .trade-badge.red { background: rgba(239,68,68,0.15); color: #ef4444; }
+  .trade-badge.blue { background: rgba(96,165,250,0.15); color: #60a5fa; }
+
+  .warning {
+    display: flex; align-items: flex-start; gap: 10px;
+    background: rgba(239,68,68,0.07); border: 1px solid rgba(239,68,68,0.2);
+    border-radius: 10px; padding: 12px;
+  }
+  .warning-icon { font-size: 14px; flex-shrink: 0; margin-top: 1px; }
+  .warning-text { font-size: 11px; color: #f87171; line-height: 1.5; }
+</style>
+</head>
+<body>
+<div class="card">
+
+  <div class="badge-group">
+    <span class="badge badge-bull">📈 상승</span>
+    <span class="badge badge-candle">캔들+패턴</span>
+  </div>
+  <div class="pattern-title">쌍바닥 장태캔들 적극공략</div>
+  <div class="pattern-subtitle">Double Bottom + 장대양봉 — 조건 충족 시만 진입하는 고신뢰 매수 전략</div>
+
+  <!-- Chart 1: 비교 차트 -->
+  <div class="chart-container" style="margin-bottom:12px">
+    <div class="chart-label">외바닥 vs 쌍바닥 비교</div>
+    <svg class="chart" viewBox="0 0 500 130" xmlns="http://www.w3.org/2000/svg">
+      <!-- Grid -->
+      <line x1="0" y1="65" x2="500" y2="65" stroke="#1c2333" stroke-width="1"/>
+
+      <!-- 왼쪽: 외바닥 (SKIP) -->
+      <!-- 20ma 곡선 -->
+      <path d="M 10,50 C 30,48 50,52 70,65 C 90,78 110,72 140,58 C 160,48 180,45 200,43"
+        fill="none" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="4,2" opacity="0.6"/>
+      <!-- 장대양봉 1개 -->
+      <rect x="55" y="30" width="16" height="45" fill="#ef4444" rx="2" opacity="0.9"/>
+      <!-- 20ma 라벨 -->
+      <text x="12" y="46" fill="#ef4444" font-size="9" font-family="JetBrains Mono" opacity="0.7">20ma</text>
+      <!-- SKIP 표시 -->
+      <text x="68" y="100" fill="#ef4444" font-size="10" font-family="Noto Sans KR" font-weight="700" text-anchor="middle">외바닥 → SKIP</text>
+      <text x="68" y="114" fill="#484f58" font-size="9" font-family="Noto Sans KR" text-anchor="middle">신뢰도 부족</text>
+
+      <!-- 구분선 -->
+      <line x1="240" y1="10" x2="240" y2="125" stroke="#21262d" stroke-width="1"/>
+
+      <!-- 오른쪽: 쌍바닥 (GO) -->
+      <path d="M 255,50 C 275,48 290,58 310,68 C 330,78 345,72 360,62 C 375,52 390,48 420,42 C 440,38 460,36 490,34"
+        fill="none" stroke="#22c55e" stroke-width="1.5" stroke-dasharray="4,2" opacity="0.6"/>
+      <!-- 장대양봉 1 -->
+      <rect x="283" y="28" width="16" height="48" fill="#ef4444" rx="2" opacity="0.7"/>
+      <!-- 장대양봉 2 (강한 매수) -->
+      <rect x="388" y="22" width="16" height="52" fill="#22c55e" rx="2" opacity="0.95"/>
+      <!-- 쌍바닥 표시 -->
+      <text x="291" y="92" fill="#ef4444" font-size="8" font-family="JetBrains Mono" text-anchor="middle">S-1</text>
+      <text x="396" y="92" fill="#22c55e" font-size="8" font-family="JetBrains Mono" text-anchor="middle">S-2★</text>
+      <!-- GO 표시 -->
+      <text x="370" y="107" fill="#22c55e" font-size="10" font-family="Noto Sans KR" font-weight="700" text-anchor="middle">쌍바닥 → GO ✓</text>
+      <text x="370" y="121" fill="#484f58" font-size="9" font-family="Noto Sans KR" text-anchor="middle">장대양봉 확인 후 진입</text>
+    </svg>
+  </div>
+
+  <!-- Chart 2: 진입/손절/목표 -->
+  <div class="chart-container" style="margin-bottom:24px">
+    <div class="chart-label">진입 · 손절 · 목표가 구조</div>
+    <svg class="chart" viewBox="0 0 500 160" xmlns="http://www.w3.org/2000/svg">
+      <!-- W 패턴 -->
+      <polyline points="30,40 90,120 150,65 210,120 290,30"
+        fill="none" stroke="#22c55e" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+      <!-- 넥라인 -->
+      <line x1="20" y1="65" x2="480" y2="65" stroke="#f97316" stroke-width="1.5" stroke-dasharray="6,3" opacity="0.8"/>
+      <!-- 손절선 -->
+      <line x1="200" y1="90" x2="480" y2="90" stroke="#ef4444" stroke-width="1" stroke-dasharray="4,3" opacity="0.6"/>
+      <!-- 목표선 -->
+      <line x1="310" y1="20" x2="480" y2="20" stroke="#22c55e" stroke-width="1" stroke-dasharray="4,3" opacity="0.6"/>
+
+      <!-- 상승 화살표 -->
+      <line x1="380" y1="65" x2="380" y2="22" stroke="#22c55e" stroke-width="1.5" stroke-dasharray="3,2"/>
+      <polygon points="380,16 374,28 386,28" fill="#22c55e"/>
+
+      <!-- S-1, S-2 -->
+      <circle cx="90" cy="120" r="4" fill="#ef4444" stroke="#0d1117" stroke-width="1.5"/>
+      <text x="78" y="138" fill="#ef4444" font-size="9" font-family="JetBrains Mono" font-weight="700">S-1</text>
+      <circle cx="210" cy="120" r="4" fill="#ef4444" stroke="#0d1117" stroke-width="1.5"/>
+      <text x="198" y="138" fill="#ef4444" font-size="9" font-family="JetBrains Mono" font-weight="700">S-2</text>
+
+      <!-- Entry 포인트 -->
+      <circle cx="290" cy="30" r="5" fill="#22c55e" stroke="#0d1117" stroke-width="2"/>
+      <!-- 장대양봉 표시 -->
+      <rect x="280" y="30" width="14" height="35" fill="#22c55e" rx="2" opacity="0.85"/>
+
+      <!-- 라벨들 -->
+      <text x="390" y="18" fill="#22c55e" font-size="10" font-family="JetBrains Mono" font-weight="700">Target</text>
+      <text x="390" y="62" fill="#f97316" font-size="10" font-family="JetBrains Mono" font-weight="700">Entry</text>
+      <text x="390" y="88" fill="#ef4444" font-size="10" font-family="JetBrains Mono" font-weight="700">Stop-Loss</text>
+
+      <!-- W 높이 = 목표 높이 브라켓 -->
+      <line x1="350" y1="65" x2="350" y2="20" stroke="#484f58" stroke-width="1"/>
+      <line x1="345" y1="65" x2="355" y2="65" stroke="#484f58" stroke-width="1"/>
+      <line x1="345" y1="20" x2="355" y2="20" stroke="#484f58" stroke-width="1"/>
+      <text x="356" y="44" fill="#484f58" font-size="8" font-family="JetBrains Mono">W높이</text>
+    </svg>
+  </div>
+
+  <!-- 매수 조건 비교 -->
+  <div class="section-title">진입 조건 비교</div>
+  <div class="compare-grid" style="margin-bottom:24px">
+    <div class="compare-item skip">
+      <div class="compare-label red">⏭ SKIP</div>
+      <div class="compare-desc">20일선 <strong style="color:#e6edf3">외바닥</strong> + 장대양봉<br>→ 1번의 바닥만으론 신뢰도 부족</div>
+    </div>
+    <div class="compare-item go">
+      <div class="compare-label green">✅ GO</div>
+      <div class="compare-desc">20일선 <strong style="color:#e6edf3">쌍바닥</strong> + 장대양봉<br>→ 지지 확인 + 강한 매수세 동시 충족</div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- 매매 계획 -->
+  <div class="section-title">매매 계획</div>
+  <div class="trade-plan">
+    <div class="trade-row">
+      <div class="trade-icon">🎯</div>
+      <div class="trade-label">진입</div>
+      <div class="trade-value">넥라인 상향 돌파 + 장대양봉 확인 시</div>
+      <span class="trade-badge green">Entry</span>
+    </div>
+    <div class="trade-row">
+      <div class="trade-icon">🛡</div>
+      <div class="trade-label">손절</div>
+      <div class="trade-value">2차 바닥(S-2) 아래 이탈 시</div>
+      <span class="trade-badge red">Stop</span>
+    </div>
+    <div class="trade-row">
+      <div class="trade-icon">📐</div>
+      <div class="trade-label">목표가</div>
+      <div class="trade-value">넥라인 기준 W 높이만큼 상승 투영</div>
+      <span class="trade-badge blue">Target</span>
+    </div>
+  </div>
+
+  <div class="warning">
+    <div class="warning-icon">⚠️</div>
+    <div class="warning-text">
+      외바닥 장대양봉은 매력적으로 보여도 패스 · 쌍바닥이라도 거래량 없는 장대양봉은 신뢰도 낮음 · 넥라인 돌파 전 선진입 금지
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
