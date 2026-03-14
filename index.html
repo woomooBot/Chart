@@ -626,6 +626,43 @@ const PATTERNS = [
     `
   },
 
+  {
+  category: "term", type: "term", tag: "보조지표",
+  title: "MACD",
+  subtitle: "두 이동평균선의 차이로 추세 방향과 모멘텀을 측정하는 지표",
+  file: "macd_card.html",
+  accentColor: "linear-gradient(90deg, #3b82f6, #a855f7)",
+  steps: [
+    { color: "#3b82f6", text: "MACD선 · 시그널선 · 히스토그램 3가지 구성" },
+    { color: "#22c55e", text: "골든크로스(매수) / 데드크로스(매도) 신호" },
+    { color: "#f97316", text: "다이버전스 — 가격과 반대 방향 = 추세 전환 예고" },
+  ],
+  svg: `
+    <line x1="10" y1="55" x2="270" y2="55" stroke="#d1d5db" stroke-width="1" stroke-dasharray="3,3"/>
+    <rect x="15"  y="40" width="8" height="15" fill="#22c55e" rx="1" opacity="0.7"/>
+    <rect x="28"  y="33" width="8" height="22" fill="#22c55e" rx="1" opacity="0.8"/>
+    <rect x="41"  y="38" width="8" height="17" fill="#22c55e" rx="1" opacity="0.7"/>
+    <rect x="54"  y="48" width="8" height="7"  fill="#22c55e" rx="1" opacity="0.5"/>
+    <rect x="67"  y="55" width="8" height="10" fill="#ef4444" rx="1" opacity="0.5"/>
+    <rect x="80"  y="55" width="8" height="18" fill="#ef4444" rx="1" opacity="0.7"/>
+    <rect x="93"  y="55" width="8" height="12" fill="#ef4444" rx="1" opacity="0.6"/>
+    <rect x="106" y="48" width="8" height="7"  fill="#22c55e" rx="1" opacity="0.5"/>
+    <rect x="119" y="33" width="8" height="22" fill="#22c55e" rx="1" opacity="0.85"/>
+    <rect x="132" y="28" width="8" height="27" fill="#22c55e" rx="1" opacity="0.9"/>
+    <rect x="145" y="32" width="8" height="23" fill="#22c55e" rx="1" opacity="0.8"/>
+    <rect x="158" y="40" width="8" height="15" fill="#22c55e" rx="1" opacity="0.7"/>
+    <rect x="171" y="50" width="8" height="5"  fill="#22c55e" rx="1" opacity="0.4"/>
+    <rect x="184" y="55" width="8" height="8"  fill="#ef4444" rx="1" opacity="0.5"/>
+    <rect x="197" y="55" width="8" height="14" fill="#ef4444" rx="1" opacity="0.6"/>
+    <path d="M 19,44 C 40,36 65,50 88,62 C 108,50 130,32 155,36 C 175,40 195,58 220,62"
+      fill="none" stroke="#3b82f6" stroke-width="2" stroke-linecap="round"/>
+    <path d="M 19,46 C 40,38 65,52 88,63 C 108,51 130,34 155,38 C 175,42 195,60 220,63"
+      fill="none" stroke="#f97316" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="3,2"/>
+    <line x1="106" y1="20" x2="106" y2="80" stroke="#22c55e" stroke-width="1" stroke-dasharray="2,2" opacity="0.6"/>
+    <text x="90" y="18" fill="#22c55e" font-size="7" font-family="Noto Sans KR" font-weight="700">골든크로스</text>
+  `
+},
+
   // ── 새 항목 추가 템플릿 ───────────────────────────────────────────
   // {
   //   category: "term",   // "chart" / "candle" / "term"
