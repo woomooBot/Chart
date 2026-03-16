@@ -22,7 +22,7 @@
     border-radius: 20px;
     width: 560px;
     padding: 32px;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.05);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
     position: relative;
     overflow: hidden;
   }
@@ -34,13 +34,12 @@
     background: linear-gradient(90deg, #22c55e, #f59e0b, #ef4444);
   }
 
-  .badge-group { display: flex; gap: 8px; align-items: center; margin-bottom: 8px; }
+  .badge-group { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
   .badge {
     font-size: 11px; font-weight: 700; letter-spacing: -0.02em;
-    padding: 4px 10px; border-radius: 6px;
-    font-family: 'Noto Sans KR', sans-serif;
+    padding: 4px 10px; border-radius: 6px; font-family: 'Noto Sans KR', sans-serif;
   }
-  .badge-both { background: rgba(245,158,11,0.12); color: #f59e0b; border: 1px solid rgba(245,158,11,0.25); }
+  .badge-both   { background: rgba(245,158,11,0.12); color: #f59e0b; border: 1px solid rgba(245,158,11,0.25); }
   .badge-theory { background: rgba(96,165,250,0.12); color: #60a5fa; border: 1px solid rgba(96,165,250,0.25); }
 
   .pattern-title { font-size: 22px; font-weight: 900; color: #f0f6fc; letter-spacing: -0.02em; margin-bottom: 4px; }
@@ -52,34 +51,37 @@
   }
   .divider { height: 1px; background: #21262d; margin-bottom: 20px; }
 
-  /* Chart */
+  /* 탭 */
+  .tabs { display: flex; gap: 4px; margin-bottom: 14px; flex-wrap: wrap; }
+  .tab-btn {
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 11px; font-weight: 700; letter-spacing: -0.01em;
+    padding: 5px 12px; border-radius: 6px;
+    border: 1px solid #21262d; background: #161b22;
+    color: #7d8590; cursor: pointer; transition: all 0.2s;
+  }
+  .tab-btn.active { background: #21262d; border-color: #30363d; color: #e6edf3; }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* 차트 */
   .chart-container {
     background: #0d1117; border: 1px solid #21262d;
-    border-radius: 12px; padding: 16px; margin-bottom: 24px;
+    border-radius: 12px; padding: 16px; margin-bottom: 16px;
   }
   .chart-label {
     font-size: 10px; color: #484f58; font-family: 'JetBrains Mono', monospace;
     margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.1em;
   }
 
-  /* 파동 설명 그리드 */
-  .wave-grid {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 24px;
-  }
-  .wave-section { border-radius: 12px; padding: 16px; border: 1px solid; }
-  .wave-section.impulse {
-    background: rgba(34,197,94,0.05); border-color: rgba(34,197,94,0.2);
-  }
-  .wave-section.correction {
-    background: rgba(239,68,68,0.05); border-color: rgba(239,68,68,0.2);
-  }
-  .wave-section-title {
-    font-size: 12px; font-weight: 800; margin-bottom: 10px;
-    display: flex; align-items: center; gap: 6px;
-  }
+  /* 파동 그리드 */
+  .wave-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+  .wave-section { border-radius: 12px; padding: 14px; border: 1px solid; }
+  .wave-section.up   { background: rgba(34,197,94,0.05);  border-color: rgba(34,197,94,0.2); }
+  .wave-section.down { background: rgba(239,68,68,0.05);  border-color: rgba(239,68,68,0.2); }
+  .wave-section-title { font-size: 12px; font-weight: 800; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
   .wave-section-title.green { color: #22c55e; }
-  .wave-section-title.red { color: #ef4444; }
-
+  .wave-section-title.red   { color: #ef4444; }
   .wave-item { display: flex; align-items: flex-start; gap: 8px; margin-bottom: 7px; }
   .wave-num {
     font-family: 'JetBrains Mono', monospace;
@@ -88,22 +90,51 @@
     display: flex; align-items: center; justify-content: center;
     flex-shrink: 0; margin-top: 1px;
   }
-  .wave-num.green { background: rgba(34,197,94,0.15); color: #22c55e; }
-  .wave-num.red-num { background: rgba(239,68,68,0.15); color: #ef4444; }
-  .wave-num.abc { background: rgba(96,165,250,0.15); color: #60a5fa; font-size: 10px; }
+  .wn-g  { background: rgba(34,197,94,0.15);  color: #22c55e; }
+  .wn-r  { background: rgba(239,68,68,0.15);  color: #ef4444; }
+  .wn-b  { background: rgba(96,165,250,0.15); color: #60a5fa; font-size: 10px; }
   .wave-text { font-size: 11px; color: #7d8590; line-height: 1.4; }
   .wave-text strong { color: #e6edf3; }
 
-  /* 핵심 규칙 */
-  .rules { display: flex; flex-direction: column; gap: 8px; margin-bottom: 24px; }
+  /* 규칙 */
+  .rules { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
   .rule-item {
     display: flex; align-items: flex-start; gap: 10px;
     background: #161b22; border: 1px solid #21262d; border-radius: 10px; padding: 12px;
   }
   .rule-icon { font-size: 14px; flex-shrink: 0; margin-top: 1px; }
-  .rule-content { flex: 1; }
   .rule-name { font-size: 12px; font-weight: 700; color: #e6edf3; margin-bottom: 2px; }
   .rule-desc { font-size: 11px; color: #7d8590; line-height: 1.4; }
+
+  /* 조정파 형태 */
+  .correction-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 16px; }
+  .corr-item { background: #161b22; border: 1px solid #21262d; border-radius: 10px; padding: 12px; }
+  .corr-name { font-size: 12px; font-weight: 700; color: #e6edf3; margin-bottom: 4px; }
+  .corr-desc { font-size: 11px; color: #7d8590; line-height: 1.4; }
+
+  /* 사이클 */
+  .cycle-list { display: flex; flex-direction: column; gap: 5px; margin-bottom: 16px; }
+  .cycle-item {
+    display: flex; align-items: center; gap: 10px;
+    background: #161b22; border: 1px solid #21262d; border-radius: 8px; padding: 9px 12px;
+  }
+  .cycle-name { font-size: 12px; font-weight: 700; color: #e6edf3; width: 130px; flex-shrink: 0; }
+  .cycle-period { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #f59e0b; }
+
+  /* 한계점 */
+  .limits { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
+  .limit-item {
+    display: flex; align-items: flex-start; gap: 10px;
+    background: rgba(239,68,68,0.05); border: 1px solid rgba(239,68,68,0.15);
+    border-radius: 10px; padding: 12px;
+  }
+  .limit-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; font-weight: 700; color: #ef4444;
+    width: 18px; flex-shrink: 0; padding-top: 1px;
+  }
+  .limit-name { font-size: 12px; font-weight: 700; color: #e6edf3; margin-bottom: 2px; }
+  .limit-desc { font-size: 11px; color: #7d8590; line-height: 1.4; }
 
   /* 매수 포인트 */
   .buy-point {
@@ -115,6 +146,15 @@
   .buy-point-title { font-size: 13px; font-weight: 700; color: #22c55e; margin-bottom: 4px; }
   .buy-point-desc { font-size: 11px; color: #7d8590; line-height: 1.6; }
   .buy-point-desc strong { color: #e6edf3; }
+
+  .tip {
+    display: flex; align-items: flex-start; gap: 10px;
+    background: rgba(245,158,11,0.07); border: 1px solid rgba(245,158,11,0.2);
+    border-radius: 10px; padding: 12px; margin-bottom: 16px;
+  }
+  .tip-icon { font-size: 14px; flex-shrink: 0; margin-top: 1px; }
+  .tip-text { font-size: 11px; color: #d97706; line-height: 1.5; }
+  .tip-text strong { color: #e6edf3; }
 
   .warning {
     display: flex; align-items: flex-start; gap: 10px;
@@ -133,177 +173,224 @@
     <span class="badge badge-theory">파동 이론</span>
   </div>
   <div class="pattern-title">엘리엇 파동 이론</div>
-  <div class="pattern-subtitle">Elliott Wave Theory — 5개 충격파 + 3개 조정파로 시장의 모든 움직임을 설명하는 이론</div>
+  <div class="pattern-subtitle">Elliott Wave Theory — 시장은 자연의 법칙과 집단심리에 따라 5충격파 + 3조정파의 패턴을 반복한다</div>
 
-  <!-- Chart -->
-  <div class="chart-container">
-    <div class="chart-label">파동 구조 시각화</div>
-    <svg width="100%" viewBox="0 0 500 200" xmlns="http://www.w3.org/2000/svg">
-
-      <!-- Grid -->
-      <line x1="0" y1="130" x2="500" y2="130" stroke="#1c2333" stroke-width="1"/>
-      <line x1="0" y1="80"  x2="500" y2="80"  stroke="#1c2333" stroke-width="1"/>
-
-      <!-- 기준선 -->
-      <line x1="0" y1="155" x2="500" y2="155" stroke="#30363d" stroke-width="1" stroke-dasharray="4,4"/>
-
-      <!-- 20ma 곡선 (빨강) -->
-      <path d="M 0,175 C 40,172 70,165 100,150 C 130,135 145,118 170,100 C 195,82 220,68 250,58 C 275,50 300,52 320,62 C 340,72 360,80 380,72 C 400,64 420,55 450,48 C 465,44 480,42 500,40"
-        fill="none" stroke="#ef4444" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
-
-      <!-- 충격파 (검정→초록) -->
-      <!-- 1파: 상승 -->
-      <line x1="80" y1="160" x2="130" y2="115" stroke="#22c55e" stroke-width="2.5" stroke-linecap="round"/>
-      <!-- 2파: 하락 조정 -->
-      <line x1="130" y1="115" x2="155" y2="135" stroke="#ef4444" stroke-width="2" stroke-linecap="round"/>
-      <!-- 3파: 강한 상승 -->
-      <line x1="155" y1="135" x2="240" y2="65" stroke="#22c55e" stroke-width="3" stroke-linecap="round"/>
-      <!-- 4파: 하락 조정 -->
-      <line x1="240" y1="65" x2="275" y2="88" stroke="#ef4444" stroke-width="2" stroke-linecap="round"/>
-      <!-- 5파: 마지막 상승 -->
-      <line x1="275" y1="88" x2="320" y2="52" stroke="#22c55e" stroke-width="2.5" stroke-linecap="round"/>
-
-      <!-- 조정파 ABC -->
-      <!-- a파: 하락 -->
-      <line x1="320" y1="52" x2="360" y2="82" stroke="#60a5fa" stroke-width="2" stroke-linecap="round"/>
-      <!-- b파: 반등 -->
-      <line x1="360" y1="82" x2="390" y2="62" stroke="#60a5fa" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="4,2"/>
-      <!-- c파: 하락 -->
-      <line x1="390" y1="62" x2="440" y2="118" stroke="#60a5fa" stroke-width="2.5" stroke-linecap="round"/>
-
-      <!-- 파동 번호 라벨 -->
-      <circle cx="80"  cy="160" r="3.5" fill="#484f58"/>
-      <circle cx="130" cy="115" r="3.5" fill="#22c55e" stroke="#0d1117" stroke-width="1.5"/>
-      <circle cx="155" cy="135" r="3"   fill="#ef4444"  stroke="#0d1117" stroke-width="1.5"/>
-      <circle cx="240" cy="65"  r="3.5" fill="#22c55e" stroke="#0d1117" stroke-width="1.5"/>
-      <circle cx="275" cy="88"  r="3"   fill="#ef4444"  stroke="#0d1117" stroke-width="1.5"/>
-      <circle cx="320" cy="52"  r="4"   fill="#22c55e" stroke="#0d1117" stroke-width="2"/>
-      <circle cx="360" cy="82"  r="3"   fill="#60a5fa" stroke="#0d1117" stroke-width="1.5"/>
-      <circle cx="390" cy="62"  r="3"   fill="#60a5fa" stroke="#0d1117" stroke-width="1.5"/>
-      <circle cx="440" cy="118" r="4"   fill="#60a5fa" stroke="#0d1117" stroke-width="2"/>
-
-      <!-- 숫자/문자 라벨 -->
-      <text x="72"  y="175" fill="#7d8590"  font-size="11" font-family="JetBrains Mono" font-weight="700">0</text>
-      <text x="126" y="108" fill="#22c55e"  font-size="12" font-family="JetBrains Mono" font-weight="700">1</text>
-      <text x="147" y="150" fill="#ef4444"  font-size="12" font-family="JetBrains Mono" font-weight="700">2</text>
-      <text x="235" y="58"  fill="#22c55e"  font-size="12" font-family="JetBrains Mono" font-weight="700">3</text>
-      <text x="267" y="104" fill="#ef4444"  font-size="12" font-family="JetBrains Mono" font-weight="700">4</text>
-      <text x="315" y="44"  fill="#22c55e"  font-size="12" font-family="JetBrains Mono" font-weight="700">5</text>
-      <text x="355" y="76"  fill="#60a5fa"  font-size="12" font-family="JetBrains Mono" font-weight="700" font-style="italic">a</text>
-      <text x="386" y="56"  fill="#60a5fa"  font-size="12" font-family="JetBrains Mono" font-weight="700" font-style="italic">b</text>
-      <text x="436" y="135" fill="#60a5fa"  font-size="12" font-family="JetBrains Mono" font-weight="700" font-style="italic">c</text>
-
-      <!-- 매수 화살표 (c파 끝) -->
-      <polygon points="440,128 434,118 446,118" fill="#f59e0b"/>
-      <text x="448" y="138" fill="#f59e0b" font-size="9" font-family="Noto Sans KR" font-weight="700">매수↑</text>
-
-      <!-- 구간 라벨 -->
-      <text x="130" y="195" fill="#22c55e" font-size="9" font-family="Noto Sans KR" opacity="0.8">← 충격파 (1~5파) →</text>
-      <text x="345" y="195" fill="#60a5fa" font-size="9" font-family="Noto Sans KR" opacity="0.8">← 조정파 →</text>
-    </svg>
+  <!-- 탭 -->
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('basic', this)">기본 구조</button>
+    <button class="tab-btn" onclick="switchTab('correction', this)">조정파 형태</button>
+    <button class="tab-btn" onclick="switchTab('cycle', this)">사이클</button>
+    <button class="tab-btn" onclick="switchTab('limit', this)">한계점</button>
   </div>
 
-  <!-- 파동 설명 -->
-  <div class="section-title">파동 구조 설명</div>
-  <div class="wave-grid">
-    <!-- 충격파 -->
-    <div class="wave-section impulse">
-      <div class="wave-section-title green">📈 충격파 (5파)</div>
-      <div class="wave-item">
-        <div class="wave-num green">1</div>
-        <div class="wave-text"><strong>1파</strong> — 초기 상승. 세력 매집 시작</div>
+  <!-- 탭 1: 기본 구조 -->
+  <div id="tab-basic" class="tab-panel active">
+
+    <div class="chart-container">
+      <div class="chart-label">5충격파 + 3조정파 구조</div>
+      <svg width="100%" viewBox="0 0 500 185" xmlns="http://www.w3.org/2000/svg">
+        <line x1="0" y1="125" x2="500" y2="125" stroke="#1c2333" stroke-width="1"/>
+        <line x1="0" y1="75"  x2="500" y2="75"  stroke="#1c2333" stroke-width="1"/>
+
+        <!-- 기준선 -->
+        <line x1="0" y1="150" x2="500" y2="150" stroke="#30363d" stroke-width="1" stroke-dasharray="4,4"/>
+
+        <!-- 20ma -->
+        <path d="M 0,168 C 50,165 90,155 130,140 C 165,126 185,108 215,90 C 245,72 270,60 300,52 C 325,46 348,50 368,60 C 388,70 405,78 425,70 C 445,62 465,54 490,46"
+          fill="none" stroke="#ef4444" stroke-width="1.8" stroke-linecap="round" opacity="0.5"/>
+
+        <!-- 충격파 -->
+        <line x1="70"  y1="155" x2="120" y2="108" stroke="#22c55e" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="120" y1="108" x2="148" y2="128" stroke="#ef4444" stroke-width="2"   stroke-linecap="round"/>
+        <line x1="148" y1="128" x2="238" y2="58"  stroke="#22c55e" stroke-width="3"   stroke-linecap="round"/>
+        <line x1="238" y1="58"  x2="270" y2="82"  stroke="#ef4444" stroke-width="2"   stroke-linecap="round"/>
+        <line x1="270" y1="82"  x2="315" y2="45"  stroke="#22c55e" stroke-width="2.5" stroke-linecap="round"/>
+
+        <!-- 조정파 ABC -->
+        <line x1="315" y1="45"  x2="358" y2="78"  stroke="#60a5fa" stroke-width="2"   stroke-linecap="round"/>
+        <line x1="358" y1="78"  x2="388" y2="58"  stroke="#60a5fa" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="4,2"/>
+        <line x1="388" y1="58"  x2="440" y2="115" stroke="#60a5fa" stroke-width="2.5" stroke-linecap="round"/>
+
+        <!-- 포인트 -->
+        <circle cx="70"  cy="155" r="3"   fill="#484f58"/>
+        <circle cx="120" cy="108" r="3.5" fill="#22c55e" stroke="#0d1117" stroke-width="1.5"/>
+        <circle cx="148" cy="128" r="3"   fill="#ef4444"  stroke="#0d1117" stroke-width="1.5"/>
+        <circle cx="238" cy="58"  r="3.5" fill="#22c55e" stroke="#0d1117" stroke-width="1.5"/>
+        <circle cx="270" cy="82"  r="3"   fill="#ef4444"  stroke="#0d1117" stroke-width="1.5"/>
+        <circle cx="315" cy="45"  r="4"   fill="#22c55e" stroke="#0d1117" stroke-width="2"/>
+        <circle cx="358" cy="78"  r="3"   fill="#60a5fa" stroke="#0d1117" stroke-width="1.5"/>
+        <circle cx="388" cy="58"  r="3"   fill="#60a5fa" stroke="#0d1117" stroke-width="1.5"/>
+        <circle cx="440" cy="115" r="4"   fill="#60a5fa" stroke="#0d1117" stroke-width="2"/>
+
+        <!-- 라벨 -->
+        <text x="62"  y="170" fill="#7d8590"  font-size="10" font-family="JetBrains Mono" font-weight="700">0</text>
+        <text x="116" y="101" fill="#22c55e"  font-size="12" font-family="JetBrains Mono" font-weight="700">1</text>
+        <text x="140" y="144" fill="#ef4444"  font-size="12" font-family="JetBrains Mono" font-weight="700">2</text>
+        <text x="233" y="51"  fill="#22c55e"  font-size="12" font-family="JetBrains Mono" font-weight="700">3</text>
+        <text x="262" y="98"  fill="#ef4444"  font-size="12" font-family="JetBrains Mono" font-weight="700">4</text>
+        <text x="310" y="38"  fill="#22c55e"  font-size="12" font-family="JetBrains Mono" font-weight="700">5</text>
+        <text x="353" y="72"  fill="#60a5fa"  font-size="12" font-family="JetBrains Mono" font-weight="700" font-style="italic">a</text>
+        <text x="384" y="52"  fill="#60a5fa"  font-size="12" font-family="JetBrains Mono" font-weight="700" font-style="italic">b</text>
+        <text x="435" y="132" fill="#60a5fa"  font-size="12" font-family="JetBrains Mono" font-weight="700" font-style="italic">c</text>
+
+        <!-- 매수 화살표 -->
+        <polygon points="440,125 434,115 446,115" fill="#f59e0b"/>
+        <text x="448" y="132" fill="#f59e0b" font-size="9" font-family="Noto Sans KR" font-weight="700">매수↑</text>
+
+        <!-- 구간 표시 -->
+        <text x="155" y="182" fill="#22c55e" font-size="9" font-family="Noto Sans KR" opacity="0.7">← 충격파 5파 →</text>
+        <text x="340" y="182" fill="#60a5fa" font-size="9" font-family="Noto Sans KR" opacity="0.7">← ABC →</text>
+      </svg>
+    </div>
+
+    <div class="wave-grid">
+      <div class="wave-section up">
+        <div class="wave-section-title green">📈 충격파 (5파)</div>
+        <div class="wave-item"><div class="wave-num wn-g">1</div><div class="wave-text"><strong>1파</strong> — 초기 상승. 세력 매집 시작</div></div>
+        <div class="wave-item"><div class="wave-num wn-r">2</div><div class="wave-text"><strong>2파</strong> — 되돌림. 1파 시작점 미돌파</div></div>
+        <div class="wave-item"><div class="wave-num wn-g">3</div><div class="wave-text"><strong>3파</strong> — 가장 강하고 긴 상승파 ⭐</div></div>
+        <div class="wave-item"><div class="wave-num wn-r">4</div><div class="wave-text"><strong>4파</strong> — 조정. 1파 고점 미돌파</div></div>
+        <div class="wave-item"><div class="wave-num wn-g">5</div><div class="wave-text"><strong>5파</strong> — 마지막 상승. 모멘텀 약화</div></div>
       </div>
-      <div class="wave-item">
-        <div class="wave-num red-num">2</div>
-        <div class="wave-text"><strong>2파</strong> — 1파 되돌림. 1파 시작점 미돌파</div>
-      </div>
-      <div class="wave-item">
-        <div class="wave-num green">3</div>
-        <div class="wave-text"><strong>3파</strong> — 가장 강하고 긴 상승파. 핵심!</div>
-      </div>
-      <div class="wave-item">
-        <div class="wave-num red-num">4</div>
-        <div class="wave-text"><strong>4파</strong> — 조정. 1파 고점 미돌파</div>
-      </div>
-      <div class="wave-item">
-        <div class="wave-num green">5</div>
-        <div class="wave-text"><strong>5파</strong> — 마지막 상승. 모멘텀 약화</div>
+      <div class="wave-section down">
+        <div class="wave-section-title red">📉 조정파 (ABC)</div>
+        <div class="wave-item"><div class="wave-num wn-b">a</div><div class="wave-text"><strong>a파</strong> — 첫 하락. 조정 시작 (5하위파)</div></div>
+        <div class="wave-item"><div class="wave-num wn-b">b</div><div class="wave-text"><strong>b파</strong> — 일시 반등. 5파 고점 미돌파 (3하위파)</div></div>
+        <div class="wave-item"><div class="wave-num wn-b">c</div><div class="wave-text"><strong>c파</strong> — 마지막 하락. <span style="color:#f59e0b;font-weight:700">매수 기회!</span> (5하위파)</div></div>
+        <div style="margin-top:10px; padding-top:10px; border-top:1px solid rgba(239,68,68,0.15)">
+          <div class="wave-text" style="font-size:10px; color:#484f58">충격파 1·3·5파 → 각 5개 하위파<br>조정파 2·4파, b파 → 각 3개 하위파</div>
+        </div>
       </div>
     </div>
 
-    <!-- 조정파 -->
-    <div class="wave-section correction">
-      <div class="wave-section-title red">📉 조정파 (ABC)</div>
-      <div class="wave-item">
-        <div class="wave-num abc">a</div>
-        <div class="wave-text"><strong>a파</strong> — 5파 후 첫 하락. 조정 시작</div>
+    <div class="section-title">절대 규칙 3가지</div>
+    <div class="rules">
+      <div class="rule-item">
+        <div class="rule-icon">📏</div>
+        <div><div class="rule-name">Rule 1 — 2파는 1파 시작점 아래로 내려가지 않는다</div><div class="rule-desc">이탈 시 파동 카운팅 오류</div></div>
       </div>
-      <div class="wave-item">
-        <div class="wave-num abc">b</div>
-        <div class="wave-text"><strong>b파</strong> — 일시 반등. 5파 고점 미돌파</div>
+      <div class="rule-item">
+        <div class="rule-icon">💪</div>
+        <div><div class="rule-name">Rule 2 — 3파는 가장 짧은 파동이 될 수 없다</div><div class="rule-desc">1·3·5파 중 반드시 두 번째 이상으로 길어야 함</div></div>
       </div>
-      <div class="wave-item">
-        <div class="wave-num abc">c</div>
-        <div class="wave-text"><strong>c파</strong> — 마지막 하락. <span style="color:#f59e0b;font-weight:700">매수 기회!</span></div>
+      <div class="rule-item">
+        <div class="rule-icon">🚫</div>
+        <div><div class="rule-name">Rule 3 — 4파는 1파 고점과 겹치지 않는다</div><div class="rule-desc">4파 저점이 1파 고점 아래로 내려오면 오류</div></div>
       </div>
-      <div style="margin-top:10px; padding-top:10px; border-top:1px solid rgba(239,68,68,0.15);">
-        <div class="wave-text" style="font-size:10px; color:#484f58;">
-          조정 후 새로운 충격파 5파 사이클 재시작
+    </div>
+
+    <div class="buy-point">
+      <div class="buy-point-icon">⭐</div>
+      <div>
+        <div class="buy-point-title">최적 매수 포인트 — c파 끝</div>
+        <div class="buy-point-desc">
+          c파 완료 = 새로운 충격파 1파 시작점<br>
+          <strong>20일선 근처 + c파 종료 + 거래량 감소</strong> 확인 시 신뢰도 최상
         </div>
       </div>
     </div>
   </div>
 
-  <div class="divider"></div>
-
-  <!-- 핵심 규칙 -->
-  <div class="section-title">절대 규칙 3가지</div>
-  <div class="rules">
-    <div class="rule-item">
-      <div class="rule-icon">📏</div>
-      <div class="rule-content">
-        <div class="rule-name">Rule 1 — 2파는 1파 시작점 아래로 내려가지 않는다</div>
-        <div class="rule-desc">2파가 0점 아래로 이탈하면 파동 카운팅 오류</div>
+  <!-- 탭 2: 조정파 형태 -->
+  <div id="tab-correction" class="tab-panel">
+    <div class="tip">
+      <div class="tip-icon">💡</div>
+      <div class="tip-text">엘리엇은 <strong>충격파보다 조정파를 파악하는 것이 더 중요하고 어렵다</strong>고 강조했어요.</div>
+    </div>
+    <div class="correction-grid">
+      <div class="corr-item" style="border-left: 3px solid #22c55e">
+        <div class="corr-name">지그재그형 (Zigzag)</div>
+        <div class="corr-desc">A-B-C 구조에서 B파가 얕고 C파가 깊게 하락. 가장 흔한 형태.</div>
+      </div>
+      <div class="corr-item" style="border-left: 3px solid #60a5fa">
+        <div class="corr-name">플랫형 (Flat)</div>
+        <div class="corr-desc">A-B-C가 비슷한 높이로 횡보. B파가 A파 시작점 근처까지 반등.</div>
+      </div>
+      <div class="corr-item" style="border-left: 3px solid #f59e0b">
+        <div class="corr-name">삼각형형 (Triangle)</div>
+        <div class="corr-desc">5개 하위파로 구성. 수렴하는 삼각형 모양. 4파와 b파에 자주 출현.</div>
+      </div>
+      <div class="corr-item" style="border-left: 3px solid #ef4444">
+        <div class="corr-name">불규칙형 (Irregular)</div>
+        <div class="corr-desc">위 3가지에 포함되지 않는 형태. 가장 파악하기 어려운 유형.</div>
       </div>
     </div>
-    <div class="rule-item">
-      <div class="rule-icon">💪</div>
-      <div class="rule-content">
-        <div class="rule-name">Rule 2 — 3파는 가장 짧은 파동이 될 수 없다</div>
-        <div class="rule-desc">3파는 1·3·5파 중 반드시 가장 길거나 두 번째로 길어야 함</div>
-      </div>
-    </div>
-    <div class="rule-item">
-      <div class="rule-icon">🚫</div>
-      <div class="rule-content">
-        <div class="rule-name">Rule 3 — 4파는 1파 고점과 겹치지 않는다</div>
-        <div class="rule-desc">4파 저점이 1파 고점 아래로 내려오면 카운팅 오류</div>
-      </div>
-    </div>
-  </div>
-
-  <div class="divider"></div>
-
-  <!-- 매수 포인트 -->
-  <div class="buy-point">
-    <div class="buy-point-icon">⭐</div>
-    <div>
-      <div class="buy-point-title">핵심 매수 포인트 — c파 끝</div>
-      <div class="buy-point-desc">
-        조정파 <strong>c파가 완료되는 시점</strong>이 최적 매수 기회예요.<br>
-        c파 끝 = 새로운 충격파 1파 시작점 → <strong>가장 낮은 리스크로 진입</strong> 가능<br>
-        20일선 근처 + 거래량 감소 확인 시 신뢰도 상승
-      </div>
+    <div class="warning">
+      <div class="warning-icon">⚠️</div>
+      <div class="warning-text">삼각형형만 5개 하위파로 구성 (나머지 조정파는 3개 하위파). 세부 형태도 상단플랫/하단상승 등으로 추가 분류됨.</div>
     </div>
   </div>
 
-  <div class="warning">
-    <div class="warning-icon">⚠️</div>
-    <div class="warning-text">
-      파동 카운팅은 주관적 — 같은 차트를 보고 해석이 다를 수 있음 · 3파 진행 중인지 5파 진행 중인지 실시간 판단 어려움 · 다른 지표와 반드시 병행 사용 권장
+  <!-- 탭 3: 사이클 -->
+  <div id="tab-cycle" class="tab-panel">
+    <div class="tip">
+      <div class="tip-icon">💡</div>
+      <div class="tip-text">파동은 <strong>프랙탈 구조</strong> — 몇 분짜리 차트부터 수십 년 차트까지 동일한 패턴이 반복돼요.</div>
+    </div>
+    <div class="cycle-list">
+      <div class="cycle-item"><span class="cycle-name">그랜드슈퍼사이클</span><span class="cycle-period">100년 이상</span></div>
+      <div class="cycle-item"><span class="cycle-name">슈퍼사이클</span><span class="cycle-period">100년 이하</span></div>
+      <div class="cycle-item"><span class="cycle-name">사이클</span><span class="cycle-period">약 30년</span></div>
+      <div class="cycle-item" style="border-color: rgba(245,158,11,0.3)"><span class="cycle-name" style="color:#f59e0b">프라이머리 ⭐</span><span class="cycle-period">약 10년 (10년 주기설)</span></div>
+      <div class="cycle-item"><span class="cycle-name">인터미디어트</span><span class="cycle-period">월간</span></div>
+      <div class="cycle-item"><span class="cycle-name">마이너</span><span class="cycle-period">주간</span></div>
+      <div class="cycle-item"><span class="cycle-name">마이뉴트</span><span class="cycle-period">일간</span></div>
+      <div class="cycle-item"><span class="cycle-name">미뉴에트</span><span class="cycle-period">시간</span></div>
+      <div class="cycle-item"><span class="cycle-name">서브미뉴에트</span><span class="cycle-period">시간 이하</span></div>
+    </div>
+    <div class="tip">
+      <div class="tip-icon">📌</div>
+      <div class="tip-text"><strong>연장파(Extension)</strong> — 충격파에서만 발생. 5파가 다시 5개 하위파로 분열되어 총 13개 충격파가 될 수 있음. 이론상 무한 반복 가능.</div>
+    </div>
+  </div>
+
+  <!-- 탭 4: 한계점 -->
+  <div id="tab-limit" class="tab-panel">
+    <div class="limits">
+      <div class="limit-item">
+        <div class="limit-num">1</div>
+        <div>
+          <div class="limit-name">자의적 해석 개입</div>
+          <div class="limit-desc">같은 차트를 10명에게 보여줘도 10가지 다른 파동 카운팅이 나옴. 엘리엇 본인도 "본인이 아니면 타당한 해석으로 볼 수 없다"고 발언.</div>
+        </div>
+      </div>
+      <div class="limit-item">
+        <div class="limit-num">2</div>
+        <div>
+          <div class="limit-name">경우의 수가 너무 많음</div>
+          <div class="limit-desc">수십 가지 이상의 패턴을 정확히 숙지해야 적용 가능. 예외 상황도 많아 학습 자체가 어려움.</div>
+        </div>
+      </div>
+      <div class="limit-item">
+        <div class="limit-num">3</div>
+        <div>
+          <div class="limit-name">돌발 변수에 취약</div>
+          <div class="limit-desc">인위적 조작이 쉬운 개별 주식에는 적용 어려움. 종합지수·섹터지수·금 가격 등에 더 적합.</div>
+        </div>
+      </div>
+      <div class="limit-item">
+        <div class="limit-num">4</div>
+        <div>
+          <div class="limit-name">방대한 데이터 필요</div>
+          <div class="limit-desc">고점·저점 기준의 충분한 데이터 없이는 정확도 보장 어려움. 거래 역사가 긴 자산일수록 신뢰도 상승.</div>
+        </div>
+      </div>
+    </div>
+    <div class="warning">
+      <div class="warning-icon">⚠️</div>
+      <div class="warning-text">이론 발표 당시 높은 정확도로 주목받았지만, 현재 실무에서 단독 활용도는 낮음. 반드시 다른 지표와 병행 사용 권장.</div>
     </div>
   </div>
 
 </div>
+
+<script>
+function switchTab(id, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+</script>
 </body>
 </html>
